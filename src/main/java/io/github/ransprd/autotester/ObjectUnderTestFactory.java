@@ -1,4 +1,4 @@
-package com.github.pojotester;
+package io.github.ransprd.autotester;
 
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
@@ -15,11 +15,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 
-class PJObjectFactory {
+class ObjectUnderTestFactory {
     private HashMap<Class<?>, Function<Class<?>, ?>> objectFactories = new HashMap<>();
     private LinkedList<Class<?>> objectFactoriesOrder = new LinkedList<>();
 
-    PJObjectFactory() {
+    ObjectUnderTestFactory() {
         addObjectFactory(char.class, type -> 'c');
         addObjectFactory(Character.class, type -> new Character('c'));
 
@@ -57,7 +57,7 @@ class PJObjectFactory {
 
         addObjectFactory(UUID.class, type -> UUID.randomUUID());
 
-        addObjectFactory(Object.class, PJReflectUtils::newInstance); // must be last
+        addObjectFactory(Object.class, ObjectReflectionTools::newInstance); // must be last
     }
 
     public <S> S createObject(Class<S> clz) {

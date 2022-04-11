@@ -1,4 +1,4 @@
-package com.github.pojotester.fixtures;
+package io.github.ransprd.autotester.fixtures;
 
 public abstract class AbstractType {
 

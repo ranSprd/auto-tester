@@ -1,4 +1,4 @@
-package com.github.pojotester;
+package io.github.ransprd.autotester;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
@@ -15,10 +15,9 @@ import java.util.function.Function;
  * Code partially copied from:
  * org.springframework.util.ReflectionUtils
  */
-public final class PJReflectUtils {
+public final class ObjectReflectionTools {
 
-    private PJReflectUtils() {
-
+    private ObjectReflectionTools() {
     }
 
     @SafeVarargs
@@ -108,7 +107,7 @@ public final class PJReflectUtils {
     public static <T> T newInstance(Class<T> clazz) {
         Objects.requireNonNull(clazz, "Clazz must not be null");
         try {
-            return clazz.newInstance();
+            return clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

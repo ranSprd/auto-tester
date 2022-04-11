@@ -1,8 +1,8 @@
-package com.github.pojotester;
+package io.github.ransprd.autotester;
 
 import java.util.function.Function;
 
-public class PJContext<T> {
+public class AutoTesterContext<T> {
 
     private final Class<T> type;
     private final Function<Class<?>, ?> objectFactory;
@@ -15,7 +15,7 @@ public class PJContext<T> {
      * @param fieldToTest   - field  to test
      * @param objectFactory - object factory - knows how to create new objects for given type
      */
-    public PJContext(Class<T> classType, String fieldToTest, Function<Class<?>, ?> objectFactory) {
+    public AutoTesterContext(Class<T> classType, String fieldToTest, Function<Class<?>, ?> objectFactory) {
         this.type = classType;
         this.objectFactory = objectFactory;
         this.testedFieldName = fieldToTest;

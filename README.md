@@ -1,10 +1,12 @@
-# pojo-tester-junit4
+# auto-tester
 
-This project provides a Java 8+ library for easy/fast/out-of-a-box/automatic tests for your POJOs/DTOs that you never tested - and which may (just like everything else) contain bugs.
+This project provides a Java library for automatic tests for your POJOs/DTOs that you never tested - 
+and which may (just like everything else) contain bugs.
 
 Library uses pure java (ReflectionAPI) for its functionality - so no 3rd party dependencies.
 
-**This software is provided as is and is released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).**
+**Note** This software is based on [pojo-tester-junit4](https://github.com/pojo-tester/pojo-tester-junit4). 
+It is provided as is and is released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0).
 
 # Integration
 
@@ -13,21 +15,11 @@ Add dependency to your ``pom.xml`` file
 
 ````xml
 <dependency>
-	<groupId>com.github.pojo-tester</groupId>
-	<artifactId>pojo-tester-junit4</artifactId>
-	<version>1.0.0</version>
+        <groupId>io.github.ranSprd</groupId>
+        <artifactId>auto-tester</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
 	<scope>test</scope>
 </dependency>
-````
-
-## Gradle
-Add dependency to your ``build.gradle`` file
-
-````groovy
-testCompile 'com.github.pojo-tester:pojo-tester-junit4:1.0.0'
-````
-````groovy
-testCompile group: 'com.github.pojo-tester', name: 'pojo-tester-junit4', version: '1.0.0'
 ````
 
 # Usage
@@ -50,7 +42,7 @@ public class PojoExemplaryTest {
     
     @Test
     public void testMyPojos() {
-        PojoTester.forClass(MyUntestedObject.class).test();
+        AutoTester.forClass(MyUntestedObject.class).test();
     }
 }
 ````
@@ -91,8 +83,8 @@ public class PojoExemplaryTest {
     
     @Test
     public void testMyPojos() {
-        PojoTester.forClass(MyUntestedObject.class)
-            .addObjectFactory(DifficultType.class, type -> new DifficultType(new Object()))        
+        AutoTester.forClass(MyUntestedObject.class)
+            .registerObjectFactory(DifficultType.class, type -> new DifficultType(new Object()))        
             .test();
     }
 } 
@@ -124,7 +116,7 @@ public class PojoExemplaryTest {
     @Test
     public void testMyPojos() {
         PojoTester.forClass(MyUntestedObject.class)
-            .addObjectFactory(Object.class, Mockito::mock) // Mockito to the rescue!        
+            .registerObjectFactory(Object.class, Mockito::mock) // Mockito to the rescue!        
             .test();
     }
 } 
