@@ -123,8 +123,34 @@ public final class ObjectReflectionTools {
                 searchType = null;
             }
         }
+        return null;
+    }
+    
+    public static Method findSetter(Class<?> clazz,  Field field, boolean includeParentClasses) {
+        Objects.requireNonNull(clazz, "Class must not be null");
+        Objects.requireNonNull(field, "Field must not be null");
+
+        String lowerCaseSetterName = "set" +field.getName().toLowerCase();
         
-        
+        Class<?> searchType = clazz;
+        while (searchType != null) {
+            Method[] methods = (searchType.isInterface() ? searchType.getMethods() : getAllDeclaredMethods(searchType));
+            for (Method method : methods) {
+                String lowerCaseMethodName = method.getName().toLowerCase();
+                if (lowerCaseMethodName.equals(lowerCaseSetterName)) {
+                    Class<?>[] params = method.getParameterTypes();
+                    if (params != null && params.length == 1 && params[0].equals(field.getType())) {
+                        return method;
+                    }
+                }
+            }
+            if (includeParentClasses) {
+                searchType = searchType.getSuperclass();
+            } else {
+                // break the loop, searching over parents is not allowed
+                searchType = null;
+            }
+        }
         return null;
     }
 
