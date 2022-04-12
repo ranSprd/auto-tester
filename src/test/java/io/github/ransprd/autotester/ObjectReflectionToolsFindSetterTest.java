@@ -10,19 +10,19 @@ public class ObjectReflectionToolsFindSetterTest {
 
     @Test
     public void testFindSetterHappyCases() throws NoSuchFieldException {
-        expectMethodExist(ClassUnderTest.class, "strParam1");
-        expectMethodExist(ClassUnderTest.class, "boolParam1");
+        expectSetterExist(ClassUnderTest.class, "strParam1");
+        expectSetterExist(ClassUnderTest.class, "boolParam1");
         
-        expectMethodExist(ClassUnderTest.class, "paramWithNonCompliantSetterNaming");
-        expectMethodExist(ClassUnderTest.class, "paramWithPrivateSetter");
+        expectSetterExist(ClassUnderTest.class, "paramWithNonCompliantSetterNaming");
+        expectSetterExist(ClassUnderTest.class, "paramWithPrivateSetter");
         
-        expectMethodExist(ClassUnderTest.class, "paramWithFluentSetter");
+        expectSetterExist(ClassUnderTest.class, "paramWithFluentSetter");
     }
     
     @Test
     public void testSetterMustReturnSameType() throws NoSuchFieldException {
-        expectMethodNotExist(ClassUnderTest.class, "paramWithoutSetter");
-        expectMethodNotExist(ClassUnderTest.class, "paramWithoutSetterButSameNameMethodExists");
+        expectSetterNotExist(ClassUnderTest.class, "paramWithoutSetter");
+        expectSetterNotExist(ClassUnderTest.class, "paramWithoutSetterButSameNameMethodExists");
     }
     
     @Test
@@ -40,18 +40,18 @@ public class ObjectReflectionToolsFindSetterTest {
     
     
     
-    private void expectMethodExist(Class<?> clazz, String fieldName) throws NoSuchFieldException {
-        expectMethodExist(clazz, fieldName, true);
+    private void expectSetterExist(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+        expectSetterExist(clazz, fieldName, true);
     }
     
-    private void expectMethodExist(Class<?> clazz, String fieldName, boolean includeParentClasses) throws NoSuchFieldException {
+    private void expectSetterExist(Class<?> clazz, String fieldName, boolean includeParentClasses) throws NoSuchFieldException {
         Field strParam1field = clazz.getDeclaredField(fieldName);
         Method method = ObjectReflectionTools.findSetter(clazz, strParam1field, includeParentClasses);
         
         assertNotNull(method);
     }
     
-    private void expectMethodNotExist(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+    private void expectSetterNotExist(Class<?> clazz, String fieldName) throws NoSuchFieldException {
         Field strParam1field = clazz.getDeclaredField(fieldName);
         Method method = ObjectReflectionTools.findSetter(clazz, strParam1field, true);
         
