@@ -23,11 +23,11 @@ import org.junit.Test;
  *
  * @author ranSprd
  */
-public class BaseMethodTesterTest {
+public class BaseMethodTestCaseTest {
     
     @Test
     public void testMethodIsPublicAndNotStatic() throws NoSuchMethodException {
-        BaseMethodTester testInstance = new BaseMethodTester();
+        BaseMethodTestCase testInstance = new BaseMethodTestCase();
         
         Method staticMethod = ClassUnderTest.class.getDeclaredMethod("staticMethod");
         assertFalse(testInstance.methodIsPublicAndNotStatic(staticMethod));

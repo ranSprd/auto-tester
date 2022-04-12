@@ -1,5 +1,6 @@
 package io.github.ransprd.autotester;
 
+import io.github.ransprd.autotester.config.TestCaseConfig;
 import java.util.function.Function;
 
 public class AutoTesterContext<T> {
@@ -7,18 +8,21 @@ public class AutoTesterContext<T> {
     private final Class<T> type;
     private final Function<Class<?>, ?> objectFactory;
     private final String testedFieldName;
+    private final TestCaseConfig config;
 
     /**
      * PojoTesterContext
      *
      * @param classType     - (root) class to test
      * @param fieldToTest   - field  to test
+     * @param config
      * @param objectFactory - object factory - knows how to create new objects for given type
      */
-    public AutoTesterContext(Class<T> classType, String fieldToTest, Function<Class<?>, ?> objectFactory) {
+    public AutoTesterContext(Class<T> classType, String fieldToTest, TestCaseConfig config, Function<Class<?>, ?> objectFactory) {
         this.type = classType;
-        this.objectFactory = objectFactory;
         this.testedFieldName = fieldToTest;
+        this.config = config;
+        this.objectFactory = objectFactory;
     }
 
     public Class<?> getTestedType() {
@@ -31,6 +35,10 @@ public class AutoTesterContext<T> {
 
     public <S> S createObject(Class<S> cls) {
         return (S) objectFactory.apply(cls);
+    }
+
+    public TestCaseConfig getConfig() {
+        return config;
     }
 
 }

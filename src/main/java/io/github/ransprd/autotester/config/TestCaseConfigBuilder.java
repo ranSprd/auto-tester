@@ -13,12 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.ransprd.autotester.tester;
+package io.github.ransprd.autotester.config;
 
 /**
  *
  * @author ranSprd
  */
-public class DefaultGetterTester {
+public class TestCaseConfigBuilder {
+    
+    private TestCaseConfig config = new TestCaseConfig();
+
+    public TestCaseConfigBuilder includeSuperclass() {
+        config.setTestSuperclassFields(true);
+        return this;
+    }
+    
+    
+    public TestCaseConfig getConfig() {
+        return config;
+    }
     
 }

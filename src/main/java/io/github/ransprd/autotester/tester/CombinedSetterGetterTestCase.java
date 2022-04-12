@@ -10,20 +10,20 @@ import java.util.function.Consumer;
  * Test if the getter returns the same value which was set by the setter.
  * 
  */
-public class CombinedSetterGetterTester extends BaseMethodTester implements Consumer<AutoTesterContext> {
+public class CombinedSetterGetterTestCase extends BaseMethodTestCase implements Consumer<AutoTesterContext> {
 
     @Override
     public void accept(AutoTesterContext context) {
         String fieldName = context.getTestedFieldName();
-        String suffix = fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
         Field field = ObjectReflectionTools.findField(context.getTestedType(), fieldName);
+        final boolean includeParentClasses = context.getConfig().isTestSuperclassFields();
 
-        Method setter = ObjectReflectionTools.findMethod(context.getTestedType(), "set" + suffix, field.getType());
+        Method setter = ObjectReflectionTools.findSetter(context.getTestedType(), field, includeParentClasses);
         if (setter == null || !methodIsPublicAndNotStatic(setter)) {
             return;
         }
 
-        Method getter = ObjectReflectionTools.findGetter(context.getTestedType(), field, true);
+        Method getter = ObjectReflectionTools.findGetter(context.getTestedType(), field, includeParentClasses);
 
         if (getter == null || !methodIsPublicAndNotStatic(getter)) {
             return;

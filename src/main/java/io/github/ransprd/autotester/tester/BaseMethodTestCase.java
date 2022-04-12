@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  *
  * @author ranSprd
  */
-public class BaseMethodTester {
+public class BaseMethodTestCase {
 
     public boolean methodIsPublicAndNotStatic(Method method) {
         return ObjectReflectionTools.checkAccessors(method, Modifier::isPublic, modifier -> !Modifier.isStatic(modifier));      

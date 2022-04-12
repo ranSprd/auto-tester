@@ -1,9 +1,12 @@
 package io.github.ransprd.autotester;
 
-import io.github.ransprd.autotester.tester.CombinedSetterGetterTester;
+import io.github.ransprd.autotester.config.TestCaseConfig;
+import io.github.ransprd.autotester.config.TestCaseConfigBuilder;
+import io.github.ransprd.autotester.tester.CombinedSetterGetterTestCase;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,12 +22,13 @@ public class AutoTester<T> {
     private final ObjectUnderTestFactory objectFactory;
 
     private final Class<T> testType;
-    private boolean testSuperclassFields = false;
+    private final TestCaseConfigBuilder configBuilder;
 
     private AutoTester(Class<T> clazz) {
         this.testType = clazz;
-        defaultTests.put(CombinedSetterGetterTester.class, new CombinedSetterGetterTester());
+        defaultTests.put(CombinedSetterGetterTestCase.class, new CombinedSetterGetterTestCase());
         objectFactory = new ObjectUnderTestFactory();
+        configBuilder = new TestCaseConfigBuilder();
     }
 
     public static <T> AutoTester forClass(Class<T> clz) {
@@ -59,19 +63,32 @@ public class AutoTester<T> {
         return this;
     }
 
+    /**
+     * short cut method for TestCaseConfigBuilder.includeSuperclass()
+     * @return 
+     */
     public AutoTester includeSuperclass() {
-        testSuperclassFields = true;
+        configBuilder.includeSuperclass();
         return this;
     }
 
     public void test() {
-        Field[] allDeclaredFields = ObjectReflectionTools.getAllDeclaredFields(testType, testSuperclassFields);
-        String[] fieldNames = Stream.of(allDeclaredFields).map(Field::getName).sorted().toArray(String[]::new);
-        for (String fieldName : fieldNames) {
-            AutoTesterContext<T> ctx = new AutoTesterContext<>(testType, fieldName, objectFactory::createObject);
-            defaultTests.values().forEach(test -> test.accept(ctx));
-            userTests.getOrDefault(fieldName, Collections.emptyList()).forEach(test -> test.accept(ctx));
+        TestCaseConfig testConfig = configBuilder.getConfig();
+        
+        List<Field> sortedFields = Stream.of(ObjectReflectionTools.getAllDeclaredFields(testType, testConfig.isTestSuperclassFields()))
+                                         .sorted(Comparator.comparing(Field::getName))
+                                         .toList();
+        
+        for (Field field : sortedFields) {
+            // add loggging and failure output here
+            testField(field, testConfig);
         }
+    }
+    
+    private void testField(Field field, TestCaseConfig config) {
+        AutoTesterContext<T> ctx = new AutoTesterContext<>(testType, field.getName(), config, objectFactory::createObject);
+        defaultTests.values().forEach(test -> test.accept(ctx));
+        userTests.getOrDefault(field.getName(), Collections.emptyList()).forEach(test -> test.accept(ctx));
     }
 
 }
