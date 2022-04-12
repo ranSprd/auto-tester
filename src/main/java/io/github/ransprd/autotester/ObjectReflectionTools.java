@@ -66,6 +66,13 @@ public final class ObjectReflectionTools {
         }
     }
 
+    /**
+     * Find a method with name (exact match) and given parameters. 
+     * @param clazz
+     * @param name
+     * @param paramTypes
+     * @return 
+     */
     public static Method findMethod(Class<?> clazz, String name, Class<?>... paramTypes) {
         Objects.requireNonNull(clazz, "Class must not be null");
         Objects.requireNonNull(name, "Method name must not be null");
@@ -81,6 +88,45 @@ public final class ObjectReflectionTools {
         }
         return null;
     }
+    
+    /**
+     * 
+     * @param clazz the class of interest
+     * @param field the field as target for the getter method
+     * @param includeParentClasses if true, super/parent classes will be used also to find a getter method 
+     * @return 
+     */
+    public static Method findGetter(Class<?> clazz,  Field field, boolean includeParentClasses) {
+        Objects.requireNonNull(clazz, "Class must not be null");
+        Objects.requireNonNull(field, "Field must not be null");
+
+        String lowerCaseFieldName = field.getName().toLowerCase();
+        
+        Class<?> searchType = clazz;
+        while (searchType != null) {
+            Method[] methods = (searchType.isInterface() ? searchType.getMethods() : getAllDeclaredMethods(searchType));
+            for (Method method : methods) {
+                String lowerCaseMethodName = method.getName().toLowerCase();
+                for (String prefix : Arrays.asList("get", "is", "has", "can", "should")) {
+                    if (lowerCaseMethodName.equals(prefix + lowerCaseFieldName)) {
+                        Class<?> resultType = method.getReturnType();
+                        if (resultType != null && resultType == field.getType()) {
+                            return method;
+                        }
+                    }
+                }
+            }
+            if (includeParentClasses) {
+                searchType = searchType.getSuperclass();
+            } else {
+                // break the loop, searching over parents is not allowed
+                searchType = null;
+            }
+        }
+        
+        
+        return null;
+    }
 
     public static Method[] getAllDeclaredMethods(Class<?> clazz) {
         Objects.requireNonNull(clazz, "Class must not be null");
@@ -91,7 +137,7 @@ public final class ObjectReflectionTools {
             methods.addAll(defaultMethods);
         }
         methods.removeIf(Method::isSynthetic);
-        return methods.toArray(new Method[0]);
+        return methods.toArray(Method[]::new);
     }
 
     public static Object invokeMethod(Object target, Method method, Object... args) {

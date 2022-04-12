@@ -68,7 +68,7 @@ public class ObjectReflectionToolsTest {
         String name = (String) ObjectReflectionTools.invokeMethod(child, getNameMethod);
 
         // then
-        Assert.assertEquals(name, "name");
+        Assert.assertEquals("name", name);
     }
 
     @Test
@@ -83,9 +83,8 @@ public class ObjectReflectionToolsTest {
         // then
         Assert.assertEquals(name, child.getName());
     }
-
+    
     // helpers
-
     private String[] toArray(String... strings) {
         return strings;
     }

@@ -1,7 +1,8 @@
 package io.github.ransprd.autotester;
 
-import io.github.ransprd.autotester.tester.PJSetterGetterTest;
+import io.github.ransprd.autotester.tester.CombinedSetterGetterTester;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -22,7 +23,7 @@ public class AutoTester<T> {
 
     private AutoTester(Class<T> clazz) {
         this.testType = clazz;
-        defaultTests.put(PJSetterGetterTest.class, new PJSetterGetterTest());
+        defaultTests.put(CombinedSetterGetterTester.class, new CombinedSetterGetterTester());
         objectFactory = new ObjectUnderTestFactory();
     }
 
@@ -45,9 +46,11 @@ public class AutoTester<T> {
         return this;
     }
 
-    public AutoTester addFieldTest(String fieldName, Consumer<AutoTesterContext> test) {
-        List<Consumer<AutoTesterContext>> testsPerField = userTests.computeIfAbsent(fieldName, e -> new LinkedList<>());
-        testsPerField.add(test);
+    public AutoTester registerTestForField(String fieldName, Consumer<AutoTesterContext>... tests) {
+        if (tests != null && tests.length > 0) {
+            List<Consumer<AutoTesterContext>> testsPerField = userTests.computeIfAbsent(fieldName, e -> new LinkedList<>());
+            testsPerField.addAll( Arrays.asList(tests));
+        }
         return this;
     }
 
