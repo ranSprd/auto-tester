@@ -75,7 +75,7 @@ public class AutoTester<T> {
     public void test() {
         TestCaseConfig testConfig = configBuilder.getConfig();
         
-        List<Field> sortedFields = Stream.of(ObjectReflectionTools.getAllDeclaredFields(testType, testConfig.isTestSuperclassFields()))
+        List<Field> sortedFields = ObjectReflectionTools.getAllDeclaredFields(testType, testConfig.isTestSuperclassFields()).stream()
                                          .sorted(Comparator.comparing(Field::getName))
                                          .toList();
         

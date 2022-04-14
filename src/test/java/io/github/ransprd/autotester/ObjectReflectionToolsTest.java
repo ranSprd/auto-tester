@@ -4,6 +4,7 @@ import io.github.ransprd.autotester.fixtures.ChildType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.List;
 import java.util.stream.Stream;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,7 +14,7 @@ public class ObjectReflectionToolsTest {
     @Test
     public void testGetAllDeclaredFields_withoutSuperclass() {
         // when
-        Field[] fields = ObjectReflectionTools.getAllDeclaredFields(ChildType.class, false);
+        Field[] fields = ObjectReflectionTools.getAllDeclaredFields(ChildType.class, false).toArray(Field[]::new);
         // then
         String[] fieldNames = Stream.of(fields).map(Field::getName).toArray(String[]::new);
         Assert.assertArrayEquals(fieldNames, toArray("name", "integerValue", "intValue"));
@@ -22,7 +23,7 @@ public class ObjectReflectionToolsTest {
     @Test
     public void testGetAllDeclaredFields_withSuperclass() {
         // when
-        Field[] fields = ObjectReflectionTools.getAllDeclaredFields(ChildType.class, true);
+        Field[] fields = ObjectReflectionTools.getAllDeclaredFields(ChildType.class, true).toArray(Field[]::new);
         // then
         String[] fieldNames = Stream.of(fields).map(Field::getName).toArray(String[]::new);
         Assert.assertArrayEquals(fieldNames, toArray("name", "integerValue", "intValue", "parentName"));
@@ -49,10 +50,10 @@ public class ObjectReflectionToolsTest {
     @Test
     public void testGetAllDeclaredMethods() {
         // when
-        Method[] allDeclaredMethods = ObjectReflectionTools.getAllDeclaredMethods(ChildType.class);
+        List<Method> allDeclaredMethods = ObjectReflectionTools.getAllDeclaredMethods(ChildType.class);
 
         // then
-        String[] methodNames = Stream.of(allDeclaredMethods).map(Method::getName).sorted().toArray(String[]::new);
+        String[] methodNames = allDeclaredMethods.stream().map(Method::getName).sorted().toArray(String[]::new);
         Assert.assertArrayEquals(methodNames, toArray("getIntValue", "getIntegerValue", "getName", "setIntValue", "setIntegerValue", "setName"));
     }
 

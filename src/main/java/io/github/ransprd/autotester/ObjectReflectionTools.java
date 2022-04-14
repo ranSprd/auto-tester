@@ -40,7 +40,7 @@ public final class ObjectReflectionTools {
         }
     }
 
-    public static Field[] getAllDeclaredFields(Class<?> clazz, boolean useSuperclass) {
+    public static List<Field> getAllDeclaredFields(Class<?> clazz, boolean useSuperclass) {
         Objects.requireNonNull(clazz, "Class must not be null");
         List<Field> fields = new LinkedList<>();
         Class<?> current = clazz;
@@ -49,7 +49,7 @@ public final class ObjectReflectionTools {
             current = current.getSuperclass();
         } while (current != Object.class && useSuperclass);
         fields.removeIf(Field::isSynthetic);
-        return fields.toArray(new Field[0]);
+        return fields;
     }
 
     public static Object getFieldValue(Object target, String fieldName) {
@@ -78,7 +78,7 @@ public final class ObjectReflectionTools {
         Objects.requireNonNull(name, "Method name must not be null");
         Class<?> searchType = clazz;
         while (searchType != null) {
-            Method[] methods = (searchType.isInterface() ? searchType.getMethods() : getAllDeclaredMethods(searchType));
+            List<Method> methods = getAllMethods(searchType);
             for (Method method : methods) {
                 if (name.equals(method.getName()) && (paramTypes == null || Arrays.equals(paramTypes, method.getParameterTypes()))) {
                     return method;
@@ -104,7 +104,7 @@ public final class ObjectReflectionTools {
         
         Class<?> searchType = clazz;
         while (searchType != null) {
-            Method[] methods = (searchType.isInterface() ? searchType.getMethods() : getAllDeclaredMethods(searchType));
+            List<Method> methods = getAllMethods(searchType);
             for (Method method : methods) {
                 String lowerCaseMethodName = method.getName().toLowerCase();
                 for (String prefix : Arrays.asList("get", "is", "has", "can", "should")) {
@@ -134,7 +134,7 @@ public final class ObjectReflectionTools {
         
         Class<?> searchType = clazz;
         while (searchType != null) {
-            Method[] methods = (searchType.isInterface() ? searchType.getMethods() : getAllDeclaredMethods(searchType));
+            List<Method> methods = getAllMethods(searchType);
             for (Method method : methods) {
                 String lowerCaseMethodName = method.getName().toLowerCase();
                 if (lowerCaseMethodName.equals(lowerCaseSetterName)) {
@@ -154,7 +154,12 @@ public final class ObjectReflectionTools {
         return null;
     }
 
-    public static Method[] getAllDeclaredMethods(Class<?> clazz) {
+    public static List<Method> getAllMethods(Class<?> searchType) throws SecurityException {
+        List<Method> methods = searchType.isInterface() ? Arrays.asList(searchType.getMethods()) : getAllDeclaredMethods(searchType);
+        return methods;
+    }
+
+    public static List<Method> getAllDeclaredMethods(Class<?> clazz) {
         Objects.requireNonNull(clazz, "Class must not be null");
         List<Method> methods = new LinkedList<>();
         Collections.addAll(methods, clazz.getDeclaredMethods());
@@ -163,7 +168,7 @@ public final class ObjectReflectionTools {
             methods.addAll(defaultMethods);
         }
         methods.removeIf(Method::isSynthetic);
-        return methods.toArray(Method[]::new);
+        return methods;
     }
 
     public static Object invokeMethod(Object target, Method method, Object... args) {
