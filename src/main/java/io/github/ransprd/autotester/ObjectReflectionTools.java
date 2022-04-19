@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -16,6 +17,8 @@ import java.util.function.Function;
  * org.springframework.util.ReflectionUtils
  */
 public final class ObjectReflectionTools {
+    
+    public static List<String> GETTER_PREFIXES = Arrays.asList("get", "is", "has", "can", "should");
 
     private ObjectReflectionTools() {
     }
@@ -30,14 +33,20 @@ public final class ObjectReflectionTools {
         return retVal;
     }
 
-    public static Field findField(Class<?> clazz, String fieldName) {
+    public static Optional<Field> findField(Class<?> clazz, String fieldName) {
         Objects.requireNonNull(clazz, "Class must not be null");
-        Objects.requireNonNull(fieldName, "fieldName must not be null");
-        try {
-            return clazz.getDeclaredField(fieldName);
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
+        
+        Class<?> current = clazz;
+        do {
+            for(Field field : current.getDeclaredFields()) {
+                if (field.getName().equalsIgnoreCase(fieldName)) {
+                    return Optional.of(field);
+                }
+            }
+            current = current.getSuperclass();
+        } while (current != Object.class);
+        
+        return Optional.empty();
     }
 
     public static List<Field> getAllDeclaredFields(Class<?> clazz, boolean useSuperclass) {

@@ -15,7 +15,7 @@ public class CombinedSetterGetterTestCase extends BaseMethodTestCase implements 
     @Override
     public void accept(AutoTesterContext context) {
         String fieldName = context.getTestedFieldName();
-        Field field = ObjectReflectionTools.findField(context.getTestedType(), fieldName);
+        Field field = ObjectReflectionTools.findField(context.getTestedType(), fieldName).get();
         final boolean includeParentClasses = context.getConfig().isTestSuperclassFields();
 
         Method setter = ObjectReflectionTools.findSetter(context.getTestedType(), field, includeParentClasses);

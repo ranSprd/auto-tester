@@ -85,9 +85,29 @@ public class ObjectReflectionToolsTest {
         Assert.assertEquals(name, child.getName());
     }
     
+    @Test 
+    public void testFindField() {
+        Assert.assertTrue(ObjectReflectionTools.findField(ClassUnderTest.class, "parentDoubleParam").isPresent());
+        Assert.assertTrue(ObjectReflectionTools.findField(ClassUnderTest.class, "strParam1").isPresent());
+        Assert.assertTrue(ObjectReflectionTools.findField(ClassUnderTest.class, "strparam1").isPresent());
+        
+        Assert.assertFalse(ObjectReflectionTools.findField(ClassUnderTest.class, "notExistingField").isPresent());
+    }
+    
     // helpers
     private String[] toArray(String... strings) {
         return strings;
     }
+
+    
+    public class ClassUnderTest extends ParentClassUnderTest {
+        private String strParam1;
+        private Boolean boolParam1;
+    }
+    
+    private class ParentClassUnderTest {
+        private double parentDoubleParam;
+    }
+    
 }
 

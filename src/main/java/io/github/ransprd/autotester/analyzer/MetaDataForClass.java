@@ -43,8 +43,6 @@ public class MetaDataForClass {
         return Optional.ofNullable(allFields.get( fieldName.toLowerCase()));
     }
     
-    
-    
     /**
      * 
      * @param clazz

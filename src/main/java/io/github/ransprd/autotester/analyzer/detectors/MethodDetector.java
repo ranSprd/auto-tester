@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.ransprd.autotester.analyzer;
+package io.github.ransprd.autotester.analyzer.detectors;
 
 import io.github.ransprd.autotester.ObjectReflectionTools;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.List;
 
 /**
- * This class is responsible for extraction of methods/fields and 
+ *
  * @author ranSprd
  */
-public class ClassAnalyzer {
+public interface MethodDetector {
+
+    List<MethodType> check(MethodDetectorScope scope);
     
     
-    public MetaDataForClass analyze(Class clazz) {
-        MetaDataForClass.InstanceBuilder builder = MetaDataForClass.get(clazz);
-        
-        ObjectReflectionTools.getAllDeclaredFields(clazz, true)
-                .forEach(field -> builder.registerField(field));
-        
-        ObjectReflectionTools.getAllMethods(clazz)
-                .forEach(method -> builder.registerMethod(method));
-        
-        return builder.getInstance();
+    public static boolean methodIsPublicAndNotStatic(Method method) {
+        return ObjectReflectionTools.checkAccessors(method, Modifier::isPublic, modifier -> !Modifier.isStatic(modifier));      
     }
+    
+    
 }
