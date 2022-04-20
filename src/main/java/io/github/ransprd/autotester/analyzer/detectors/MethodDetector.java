@@ -18,7 +18,7 @@ package io.github.ransprd.autotester.analyzer.detectors;
 import io.github.ransprd.autotester.ObjectReflectionTools;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -26,12 +26,11 @@ import java.util.List;
  */
 public interface MethodDetector {
 
-    List<MethodType> check(MethodDetectorScope scope);
+    Optional<MethodClassifications> check(MethodDetectorScope scope);
     
     
     public static boolean methodIsPublicAndNotStatic(Method method) {
         return ObjectReflectionTools.checkAccessors(method, Modifier::isPublic, modifier -> !Modifier.isStatic(modifier));      
     }
-    
     
 }

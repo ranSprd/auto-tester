@@ -1,6 +1,6 @@
-package io.github.ransprd.autotester.tester;
+package io.github.ransprd.autotester.legacy.tester;
 
-import io.github.ransprd.autotester.AutoTesterContext;
+import io.github.ransprd.autotester.legacy.OldAutoTesterContext;
 import io.github.ransprd.autotester.ObjectReflectionTools;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -8,12 +8,12 @@ import java.util.function.Consumer;
 
 /**
  * Test if the getter returns the same value which was set by the setter.
- * 
+ * @deprecated 
  */
-public class CombinedSetterGetterTestCase extends BaseMethodTestCase implements Consumer<AutoTesterContext> {
+public class CombinedSetterGetterTestCase extends BaseMethodTestCase implements Consumer<OldAutoTesterContext> {
 
     @Override
-    public void accept(AutoTesterContext context) {
+    public void accept(OldAutoTesterContext context) {
         String fieldName = context.getTestedFieldName();
         Field field = ObjectReflectionTools.findField(context.getTestedType(), fieldName).get();
         final boolean includeParentClasses = context.getConfig().isTestSuperclassFields();

@@ -16,6 +16,7 @@
 package io.github.ransprd.autotester.analyzer.detectors.methods;
 
 import io.github.ransprd.autotester.ObjectReflectionTools;
+import io.github.ransprd.autotester.analyzer.detectors.MethodClassifications;
 import io.github.ransprd.autotester.analyzer.detectors.MethodDetector;
 import io.github.ransprd.autotester.analyzer.detectors.MethodDetectorScope;
 import io.github.ransprd.autotester.analyzer.detectors.MethodType;
@@ -32,7 +33,7 @@ public class GetterDetector implements MethodDetector {
     
     
     @Override
-    public List<MethodType> check(MethodDetectorScope scope) {
+    public Optional<MethodClassifications> check(MethodDetectorScope scope) {
         if (MethodDetector.methodIsPublicAndNotStatic(scope.getMethod())) {
             if (scope.getMethod().getParameterCount() == 0) {
                 String lowerCaseMethodName = scope.getMethodName().toLowerCase();
@@ -42,13 +43,13 @@ public class GetterDetector implements MethodDetector {
                         Class<?> methodResultType = scope.getMethod().getReturnType();
                         Class<?> fieldType = field.get().getType();
                         if (Objects.equals(methodResultType, fieldType)) {
-                            return List.of( MethodType.Getter);
+                            return Optional.of(new MethodClassifications(MethodType.Getter, field.get()));
                         }
                     }
                 }
             }
         }
-        return List.of();
+        return Optional.empty();
     }
     
     private Optional<Field> findFieldForGetter(MethodDetectorScope scope, String lowerCaseMethodName, String getterPrefix) {

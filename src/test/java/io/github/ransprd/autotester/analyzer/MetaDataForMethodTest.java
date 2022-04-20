@@ -13,21 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.ransprd.demo.auto.tester.model;
+package io.github.ransprd.autotester.analyzer;
 
-import io.github.ransprd.autotester.legacy.OldAutoTester;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import io.github.ransprd.autotester.analyzer.detectors.MethodClassifications;
+import java.util.List;
+import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
 
 /**
  *
  * @author ranSprd
  */
-public class BaseDTOTest {
+public class MetaDataForMethodTest {
     
     @Test
-    public void testGetterAndSetter() {
-        OldAutoTester.forClass(BaseDTO.class).test();
+    public void testGetMethod() throws NoSuchMethodException {
+        MetaDataForMethod testInstance = new MetaDataForMethod( Object.class.getMethod("toString"), new MethodClassifications(List.of()));
+        assertNotNull(testInstance.getMethod());
     }
     
 }

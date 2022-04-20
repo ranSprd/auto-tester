@@ -15,6 +15,8 @@
  */
 package io.github.ransprd.autotester.analyzer;
 
+import java.util.List;
+import java.util.Optional;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -29,20 +31,54 @@ public class ClassAnalyzerTest {
         ClassAnalyzer analyzer = new ClassAnalyzer();
         MetaDataForClass metaData = analyzer.analyze(ClassUnderTest.class);
         
+        Optional<MetaDataForField> overwrittenFieldDef = metaData.findField("overwrittenfield");
+        assertTrue(overwrittenFieldDef.isPresent());
+        assertTrue(overwrittenFieldDef.get().hasParentFields());
+        
+        Optional<MetaDataForField> myFieldDef = metaData.findField("myField");
+        assertTrue(myFieldDef.isPresent());
+        assertFalse(myFieldDef.get().hasParentFields());
+        
+        List<MetaDataForMethod> methods = metaData.getAllMethods();
+        assertNotNull(methods);
+        assertFalse(methods.isEmpty());
+        assertEquals(3, methods.size());
+        methods.stream().forEach(m -> System.out.println(m) );
+        
     }
     
     
     
     public static class ClassUnderTest extends ParentClassUnderTest {
         
-        private boolean overwrittenParameter;
+        private boolean overwrittenField;
+        private String myField;
+
+        public boolean isOverwrittenField() {
+            return overwrittenField;
+        }
+
+        public void setOverwrittenField(boolean overwrittenField) {
+            this.overwrittenField = overwrittenField;
+        }
+
+        public String getMyField() {
+            return myField;
+        }
+
     }
     
     public static class ParentClassUnderTest {
         
-        private String overwrittenParameter;
-        
-        
+        private String overwrittenField;
+
+        public String getOverwrittenField() {
+            return overwrittenField;
+        }
+
+        public void setOverwrittenField(String overwrittenField) {
+            this.overwrittenField = overwrittenField;
+        }
         
     }
     

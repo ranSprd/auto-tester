@@ -13,21 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.ransprd.demo.auto.tester.model;
+package io.github.ransprd.autotester.legacy.tester;
 
-import io.github.ransprd.autotester.legacy.OldAutoTester;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import io.github.ransprd.autotester.legacy.OldAutoTesterContext;
+import io.github.ransprd.autotester.ObjectReflectionTools;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.function.Consumer;
 
 /**
  *
  * @author ranSprd
+ * @deprecated 
  */
-public class BaseDTOTest {
-    
-    @Test
-    public void testGetterAndSetter() {
-        OldAutoTester.forClass(BaseDTO.class).test();
+public class BaseMethodTestCase {
+
+    public boolean methodIsPublicAndNotStatic(Method method) {
+        return ObjectReflectionTools.checkAccessors(method, Modifier::isPublic, modifier -> !Modifier.isStatic(modifier));      
     }
-    
+
 }

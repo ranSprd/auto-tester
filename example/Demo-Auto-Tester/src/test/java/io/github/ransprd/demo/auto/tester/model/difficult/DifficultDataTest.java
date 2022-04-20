@@ -15,7 +15,7 @@
  */
 package io.github.ransprd.demo.auto.tester.model.difficult;
 
-import io.github.ransprd.autotester.AutoTester;
+import io.github.ransprd.autotester.legacy.OldAutoTester;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -26,7 +26,7 @@ public class DifficultDataTest {
     
     @Test
     public void testGetterAndSetter() {
-        AutoTester.forClass(DifficultData.class)
+        OldAutoTester.forClass(DifficultData.class)
                   .registerObjectFactory(DifficultType.class, type -> new DifficultType(new Object()))    
                   .test();
         

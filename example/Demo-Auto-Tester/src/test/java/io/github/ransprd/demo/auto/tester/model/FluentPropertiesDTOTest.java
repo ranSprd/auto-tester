@@ -15,7 +15,7 @@
  */
 package io.github.ransprd.demo.auto.tester.model;
 
-import io.github.ransprd.autotester.AutoTester;
+import io.github.ransprd.autotester.legacy.OldAutoTester;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -26,7 +26,7 @@ public class FluentPropertiesDTOTest {
     
     @Test
     public void testGetterAndSetter() {
-        AutoTester.forClass(FluentPropertiesDTO.class).test();
+        OldAutoTester.forClass(FluentPropertiesDTO.class).test();
     }
     
 }

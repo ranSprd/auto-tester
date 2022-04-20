@@ -15,12 +15,15 @@
  */
 package io.github.ransprd.autotester.analyzer.detectors.methods;
 
+import io.github.ransprd.autotester.analyzer.detectors.MethodClassifications;
+import io.github.ransprd.autotester.analyzer.detectors.MethodDetector;
 import io.github.ransprd.autotester.analyzer.detectors.MethodDetectorScope;
 import io.github.ransprd.autotester.analyzer.detectors.MethodType;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
@@ -67,17 +70,18 @@ public class SetterDetectorTest {
     
     
     public void expectSetter(String methodName) {
-        List<MethodType> types = detect(methodName);
-        assertEquals("Method '" +methodName +"' is not detected as SETTER", 1, types.size());
-        assertTrue("Method '" +methodName +"' is not detected as SETTER", types.contains(MethodType.Setter));
+        Optional<MethodClassifications> types = detect(methodName);
+        assertTrue("There should be a classification", types.isPresent());
+        assertEquals("Method '" +methodName +"' is not detected as SETTER", 1, types.get().size());
+        assertTrue("Method '" +methodName +"' is not detected as SETTER", types.get().contains(MethodType.Setter));
     }
     
     public void shouldNotDetectAsSetter(String methodName) {
-        List<MethodType> types = detect(methodName);
+        Optional<MethodClassifications> types = detect(methodName);
         assertTrue("Method '" +methodName +"' is detected as SETTER which is not expected", types.isEmpty());
     }
     
-    private List<MethodType> detect(String methodName) {
+    private Optional<MethodClassifications> detect(String methodName) {
         Method method = methods.get(methodName);
         assertNotNull("Test clase (ClassUnderTest) should contain a method called '" +methodName +"' otherwise our test will fail", method);
         

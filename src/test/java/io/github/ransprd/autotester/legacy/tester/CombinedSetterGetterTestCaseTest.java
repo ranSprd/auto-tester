@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.ransprd.autotester.tester;
+package io.github.ransprd.autotester.legacy.tester;
 
-import io.github.ransprd.autotester.AutoTester;
+import io.github.ransprd.autotester.legacy.OldAutoTester;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -27,12 +27,12 @@ public class CombinedSetterGetterTestCaseTest {
     
     @Test
     public void testHappyCase() {
-        AutoTester.forClass(WorkingClass.class).test();
+        OldAutoTester.forClass(WorkingClass.class).test();
     }
     
     @Test(expected = IllegalStateException.class)
     public void testSetterModifiesInput() {
-        AutoTester.forClass(NotWorkingSetterClass.class).test();
+        OldAutoTester.forClass(NotWorkingSetterClass.class).test();
     }
     
     

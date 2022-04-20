@@ -31,10 +31,6 @@ public class MetaDataForField {
     public MetaDataForField() {
     }
 
-    public MetaDataForField(Field field) {
-        this.field = field;
-    }
-
     public void setField(Field field) {
         this.field = field;
     }
@@ -57,6 +53,10 @@ public class MetaDataForField {
             parentFields = new ArrayList<>();
         }
         parentFields.add(fieldOfParent);
+    }
+    
+    public boolean hasParentFields() {
+        return (parentFields != null && !parentFields.isEmpty());
     }
    
 

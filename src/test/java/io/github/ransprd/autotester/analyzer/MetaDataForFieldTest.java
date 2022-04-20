@@ -15,24 +15,29 @@
  */
 package io.github.ransprd.autotester.analyzer;
 
-import io.github.ransprd.autotester.ObjectReflectionTools;
+import java.lang.reflect.Field;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
- * This class is responsible for extraction of methods/fields and 
+ *
  * @author ranSprd
  */
-public class ClassAnalyzer {
+public class MetaDataForFieldTest {
+    
+    @Test
+    public void testDelegatedMethods() throws NoSuchFieldException {
+        Field field = ClassUnderTest.class.getDeclaredField("field");
+        MetaDataForField testInstance = new MetaDataForField();
+        testInstance.setField( field);
+        
+        assertEquals( field.getName(), testInstance.getName());
+        assertEquals( field.getModifiers(), testInstance.getModifiers());
+        assertEquals( field.getType(), testInstance.getType());
+    }
     
     
-    public static MetaDataForClass analyze(Class clazz) {
-        MetaDataForClass.InstanceBuilder builder = MetaDataForClass.get(clazz);
-        
-        ObjectReflectionTools.getAllDeclaredFields(clazz, true)
-                .forEach(field -> builder.registerField(field));
-        
-        ObjectReflectionTools.getAllMethods(clazz)
-                .forEach(method -> builder.registerMethod(method));
-        
-        return builder.getInstance();
+    private class ClassUnderTest {
+        private String field;
     }
 }

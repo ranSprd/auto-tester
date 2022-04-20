@@ -1,9 +1,15 @@
-package io.github.ransprd.autotester;
+package io.github.ransprd.autotester.legacy;
 
 import io.github.ransprd.autotester.config.TestCaseConfig;
 import java.util.function.Function;
 
-public class AutoTesterContext<T> {
+/**
+ * 
+ * @author ranSprd
+ * @param <T> 
+ * @deprecated 
+ */
+public class OldAutoTesterContext<T> {
 
     private final Class<T> type;
     private final Function<Class<?>, ?> objectFactory;
@@ -18,7 +24,7 @@ public class AutoTesterContext<T> {
      * @param config
      * @param objectFactory - object factory - knows how to create new objects for given type
      */
-    public AutoTesterContext(Class<T> classType, String fieldToTest, TestCaseConfig config, Function<Class<?>, ?> objectFactory) {
+    public OldAutoTesterContext(Class<T> classType, String fieldToTest, TestCaseConfig config, Function<Class<?>, ?> objectFactory) {
         this.type = classType;
         this.testedFieldName = fieldToTest;
         this.config = config;

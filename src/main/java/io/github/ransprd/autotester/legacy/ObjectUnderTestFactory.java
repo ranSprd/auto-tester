@@ -1,5 +1,6 @@
-package io.github.ransprd.autotester;
+package io.github.ransprd.autotester.legacy;
 
+import io.github.ransprd.autotester.ObjectReflectionTools;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;

@@ -1,18 +1,18 @@
-package io.github.ransprd.autotester;
+package io.github.ransprd.autotester.legacy;
 
 import io.github.ransprd.autotester.fixtures.ChildType;
 import org.junit.Test;
 
-public class AutoTesterTest {
+public class OldAutoTesterTest {
 
     @Test
     public void test() {
-        AutoTester.forClass(ChildType.class).test();
+        OldAutoTester.forClass(ChildType.class).test();
     }
 
     @Test
     public void testCreators() {
-        AutoTester pojoTester = AutoTester.forClass(Object.class);
+        OldAutoTester pojoTester = OldAutoTester.forClass(Object.class);
 
         ObjectUnderTestFactory objectFactory = new ObjectUnderTestFactory();
         objectFactory.createObject(String[].class);

@@ -15,11 +15,11 @@
  */
 package io.github.ransprd.autotester.analyzer.detectors.methods;
 
+import io.github.ransprd.autotester.analyzer.detectors.MethodClassifications;
 import io.github.ransprd.autotester.analyzer.detectors.MethodDetector;
 import io.github.ransprd.autotester.analyzer.detectors.MethodDetectorScope;
 import io.github.ransprd.autotester.analyzer.detectors.MethodType;
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,18 +30,18 @@ public class SetterDetector implements MethodDetector {
     
     
     @Override
-    public List<MethodType> check(MethodDetectorScope scope) {
+    public Optional<MethodClassifications> check(MethodDetectorScope scope) {
         if (MethodDetector.methodIsPublicAndNotStatic(scope.getMethod())) {
             final String methodName = scope.getMethodName();
             if (methodName.length() > 3 && scope.getMethod().getParameterCount() == 1 && methodName.startsWith("set")) {
                 String setterFieldName = methodName.substring(3);
                 Optional<Field> field = scope.findField(setterFieldName);
                 if (field.isPresent()) {
-                    return List.of( MethodType.Setter);
+                    return Optional.of(new MethodClassifications(MethodType.Setter, field.get()));
                 }
             }
         }
-        return List.of();
+        return Optional.empty();
     }
     
 }

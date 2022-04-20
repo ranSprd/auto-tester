@@ -1,8 +1,10 @@
-package io.github.ransprd.autotester;
+package io.github.ransprd.autotester.legacy;
 
+import io.github.ransprd.autotester.ObjectReflectionTools;
+import io.github.ransprd.autotester.legacy.ObjectUnderTestFactory;
 import io.github.ransprd.autotester.config.TestCaseConfig;
 import io.github.ransprd.autotester.config.TestCaseConfigBuilder;
-import io.github.ransprd.autotester.tester.CombinedSetterGetterTestCase;
+import io.github.ransprd.autotester.legacy.tester.CombinedSetterGetterTestCase;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,26 +15,31 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
-public class AutoTester<T> {
+/**
+ * 
+ * @author ranSprd
+ * @param <T> 
+ * @deprecated 
+ */
+public class OldAutoTester<T> {
 
-    private final Map<Class<?>, Consumer<AutoTesterContext>> defaultTests = new LinkedHashMap<>();
-    private final Map<String, List<Consumer<AutoTesterContext>>> userTests = new LinkedHashMap<>();
+    private final Map<Class<?>, Consumer<OldAutoTesterContext>> defaultTests = new LinkedHashMap<>();
+    private final Map<String, List<Consumer<OldAutoTesterContext>>> userTests = new LinkedHashMap<>();
     private final ObjectUnderTestFactory objectFactory;
 
     private final Class<T> testType;
     private final TestCaseConfigBuilder configBuilder;
 
-    private AutoTester(Class<T> clazz) {
+    private OldAutoTester(Class<T> clazz) {
         this.testType = clazz;
         defaultTests.put(CombinedSetterGetterTestCase.class, new CombinedSetterGetterTestCase());
         objectFactory = new ObjectUnderTestFactory();
         configBuilder = new TestCaseConfigBuilder();
     }
 
-    public static <T> AutoTester forClass(Class<T> clz) {
-        return new AutoTester<>(clz);
+    public static <TYPE> OldAutoTester<TYPE> forClass(Class<TYPE> clz) {
+        return new OldAutoTester<>(clz);
     }
 
     /**
@@ -45,20 +52,20 @@ public class AutoTester<T> {
      * @param factory
      * @return 
      */
-    public AutoTester registerObjectFactory(Class<?> clazz, Function<Class<?>, ?> factory) {
+    public OldAutoTester registerObjectFactory(Class<?> clazz, Function<Class<?>, ?> factory) {
         objectFactory.addObjectFactory(clazz, factory);
         return this;
     }
 
-    public AutoTester registerTestForField(String fieldName, Consumer<AutoTesterContext>... tests) {
+    public OldAutoTester registerTestForField(String fieldName, Consumer<OldAutoTesterContext>... tests) {
         if (tests != null && tests.length > 0) {
-            List<Consumer<AutoTesterContext>> testsPerField = userTests.computeIfAbsent(fieldName, e -> new LinkedList<>());
+            List<Consumer<OldAutoTesterContext>> testsPerField = userTests.computeIfAbsent(fieldName, e -> new LinkedList<>());
             testsPerField.addAll( Arrays.asList(tests));
         }
         return this;
     }
 
-    public AutoTester removeDefaultTest(Class<?> testClass) {
+    public OldAutoTester removeDefaultTest(Class<?> testClass) {
         defaultTests.remove(testClass);
         return this;
     }
@@ -67,7 +74,7 @@ public class AutoTester<T> {
      * short cut method for TestCaseConfigBuilder.includeSuperclass()
      * @return 
      */
-    public AutoTester includeSuperclass() {
+    public OldAutoTester includeSuperclass() {
         configBuilder.includeSuperclass();
         return this;
     }
@@ -86,7 +93,7 @@ public class AutoTester<T> {
     }
     
     private void testField(Field field, TestCaseConfig config) {
-        AutoTesterContext<T> ctx = new AutoTesterContext<>(testType, field.getName(), config, objectFactory::createObject);
+        OldAutoTesterContext<T> ctx = new OldAutoTesterContext<>(testType, field.getName(), config, objectFactory::createObject);
         defaultTests.values().forEach(test -> test.accept(ctx));
         userTests.getOrDefault(field.getName(), Collections.emptyList()).forEach(test -> test.accept(ctx));
     }

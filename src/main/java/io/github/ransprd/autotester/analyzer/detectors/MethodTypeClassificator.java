@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author ranSprd
  */
-public enum MethodTypeResolver {
+public enum MethodTypeClassificator {
     
     INSTANCE;
     
@@ -34,13 +34,14 @@ public enum MethodTypeResolver {
     );
     
    
-    public List<MethodType> computeMethodTypes(Class<?> clazz, Method method) {
+    public MethodClassifications computeMethodTypes(Class<?> clazz, Method method) {
         MethodDetectorScope scope = new MethodDetectorScope(clazz, method);
-        return detectors.stream()
-                .map(detector -> detector.check(scope))
-                .flatMap(list -> list.stream())
-                .distinct()
-                .toList();
+        return new MethodClassifications(detectors.stream()
+                        .map(detector -> detector.check(scope))
+                        .filter(classification -> classification.isPresent())
+                        .flatMap(classification -> classification.get().getClassifications().stream())
+                        .distinct()
+                        .toList() );
     }
     
 }

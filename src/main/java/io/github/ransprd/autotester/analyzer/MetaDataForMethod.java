@@ -15,6 +15,7 @@
  */
 package io.github.ransprd.autotester.analyzer;
 
+import io.github.ransprd.autotester.analyzer.detectors.MethodClassifications;
 import java.lang.reflect.Method;
 
 /**
@@ -24,15 +25,22 @@ import java.lang.reflect.Method;
 public class MetaDataForMethod {
     
     private final Method method;
-    
-    private boolean setter = false;
-    private boolean getter = false;
-    private MetaDataForField field;
-    
+    private final MethodClassifications methodClassifications;
 
-    public MetaDataForMethod(Method method) {
+    public MetaDataForMethod(Method method, MethodClassifications methodClassifications) {
         this.method = method;
+        this.methodClassifications = methodClassifications;
     }
+
+    public Method getMethod() {
+        return method;
+    }
+
+    @Override
+    public String toString() {
+        return "{" + "methodName=" + method.getName() + ", types=" + methodClassifications.getClassifications() + '}';
+    }
+
     
     
     

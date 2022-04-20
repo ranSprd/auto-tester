@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.ransprd.autotester.tester;
+package io.github.ransprd.autotester.analyzer;
 
-import io.github.ransprd.autotester.AutoTesterContext;
-import io.github.ransprd.autotester.ObjectReflectionTools;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.function.Consumer;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author ranSprd
  */
-public class BaseMethodTestCase {
-
-    public boolean methodIsPublicAndNotStatic(Method method) {
-        return ObjectReflectionTools.checkAccessors(method, Modifier::isPublic, modifier -> !Modifier.isStatic(modifier));      
+public class MetaDataForClassTest {
+    
+    @Test
+    public void testFindFieldWithInvalidParameters() {
+        MetaDataForClass testInstance = new MetaDataForClass(Object.class);
+        assertTrue( testInstance.findField(null).isEmpty());
+        assertTrue( testInstance.findField("").isEmpty());
+        assertTrue( testInstance.findField("clazz").isEmpty());
     }
-
+    
 }

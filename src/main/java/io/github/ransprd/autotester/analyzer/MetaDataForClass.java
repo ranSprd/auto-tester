@@ -15,9 +15,12 @@
  */
 package io.github.ransprd.autotester.analyzer;
 
+import io.github.ransprd.autotester.analyzer.detectors.MethodTypeClassificator;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -29,8 +32,8 @@ public class MetaDataForClass {
     
     private final Class<?> clazz;
     
-    private Map<String, MetaDataForMethod> allMethods;
-    private Map<String, MetaDataForField> allFields = new HashMap<>();
+    private final List<MetaDataForMethod> allMethods = new ArrayList<>();
+    private final Map<String, MetaDataForField> allFields = new HashMap<>();
     
     public MetaDataForClass(Class<?> clazz) {
         this.clazz = clazz;
@@ -42,6 +45,12 @@ public class MetaDataForClass {
         }
         return Optional.ofNullable(allFields.get( fieldName.toLowerCase()));
     }
+
+    public List<MetaDataForMethod> getAllMethods() {
+        return allMethods;
+    }
+    
+    
     
     /**
      * 
@@ -70,19 +79,19 @@ public class MetaDataForClass {
             String normalizedFieldName = field.getName().toLowerCase();
             MetaDataForField fieldEntry = instance.allFields.computeIfAbsent(normalizedFieldName, x -> new MetaDataForField());
             
-            if (field.getClass().equals( instance.clazz)) {
+            if (field.getDeclaringClass().equals( instance.clazz)) {
                 // field of the target class, we expect that a field is not already set (no check)
                 fieldEntry.setField(field);
             } else {
                 // seems a field of a parent
                 fieldEntry.addParentField(field);
             }
-
         }
 
-
         void registerMethod(Method method) {
-
+            instance.allMethods.add(
+                    new MetaDataForMethod(method, 
+                         MethodTypeClassificator.INSTANCE.computeMethodTypes(instance.clazz, method)));
         }
     }
     
