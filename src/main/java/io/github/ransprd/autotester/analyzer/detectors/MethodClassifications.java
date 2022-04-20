@@ -65,6 +65,25 @@ public class MethodClassifications {
     }
     
     /**
+     * 
+     * @param types
+     * @return true if all given types are contained. If the given list is empty 
+     * then the result is alway false.
+     */
+    public boolean contains(MethodType... types) {
+        if (types == null || types.length < 1 || classifications.isEmpty()) {
+            return false;
+        }
+        
+        for(MethodType type : types) {
+            if (!contains(type)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
      * number of classifications
      * @return 
      */

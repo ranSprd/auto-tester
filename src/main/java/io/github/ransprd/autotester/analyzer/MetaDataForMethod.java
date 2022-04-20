@@ -16,6 +16,7 @@
 package io.github.ransprd.autotester.analyzer;
 
 import io.github.ransprd.autotester.analyzer.detectors.MethodClassifications;
+import io.github.ransprd.autotester.analyzer.detectors.MethodType;
 import java.lang.reflect.Method;
 
 /**
@@ -36,6 +37,10 @@ public class MetaDataForMethod {
         return method;
     }
 
+    public boolean contains(MethodType... types) {
+        return methodClassifications.contains(types);
+    }
+    
     @Override
     public String toString() {
         return "{" + "methodName=" + method.getName() + ", types=" + methodClassifications.getClassifications() + '}';
