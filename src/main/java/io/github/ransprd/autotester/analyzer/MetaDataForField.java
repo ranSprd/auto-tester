@@ -15,8 +15,10 @@
  */
 package io.github.ransprd.autotester.analyzer;
 
+import io.github.ransprd.autotester.analyzer.detectors.MethodType;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,6 +29,8 @@ public class MetaDataForField {
     
     private Field field;
     private List<Field> parentFields;
+    
+    private final List<MetaDataForMethod> usedByMethods = new ArrayList<>();
 
     public MetaDataForField() {
     }
@@ -58,6 +62,34 @@ public class MetaDataForField {
     public boolean hasParentFields() {
         return (parentFields != null && !parentFields.isEmpty());
     }
-   
+
+    public List<MetaDataForMethod> getUsedByMethods() {
+        return usedByMethods;
+    }
+
+    public boolean addMethod(MetaDataForMethod e) {
+        if (e == null || !e.getUsedFields().contains(field)) {
+            return false;
+        }
+        
+        return usedByMethods.add(e);
+    }
+    
+    /**
+     * All detected methodTypes (getter, setter...) from all methods which are
+     * 'connected'
+     * 
+     * @return a set of methodTypes
+     */
+    public Collection<MethodType> getAllMethodTypes() {
+        return usedByMethods.stream()
+                .map( method -> method.getMethodClassifications())
+                .flatMap(classifications -> classifications.getClassifications().stream())
+                .map(methodData -> methodData.methodType())
+                .distinct()
+                .toList();
+    }
+    
+    
 
 }

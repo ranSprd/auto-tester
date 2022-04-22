@@ -34,7 +34,14 @@ public enum MethodTypeClassificator {
     );
     
    
-    public MethodClassifications computeMethodTypes(Class<?> clazz, Method method) {
+    /**
+     * Classify means, that all registered method detectors (setter, getter...)
+     * are excuted, the results are collected and returned.
+     * @param clazz
+     * @param method
+     * @return 
+     */
+    public MethodClassifications classify(Class<?> clazz, Method method) {
         MethodDetectorScope scope = new MethodDetectorScope(clazz, method);
         return new MethodClassifications(detectors.stream()
                         .map(detector -> detector.check(scope))

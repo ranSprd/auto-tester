@@ -15,7 +15,6 @@
  */
 package io.github.ransprd.autotester.analyzer.detectors;
 
-import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -23,22 +22,27 @@ import static org.junit.Assert.*;
  *
  * @author ranSprd
  */
-public class MethodTypeResolverTest {
+public class MethodTypeClassificatorTest {
     
     @Test
     public void testClassification() throws NoSuchMethodException {
-        MethodClassifications anyMethodTypes = MethodTypeClassificator.INSTANCE.computeMethodTypes(ClassUnderTest.class, ClassUnderTest.class.getMethod("anyMethod"));
+        MethodClassifications anyMethodTypes = MethodTypeClassificator.INSTANCE.classify(ClassUnderTest.class, ClassUnderTest.class.getMethod("anyMethod"));
         assertTrue(anyMethodTypes.isEmpty());
         
-        MethodClassifications getStrFieldTypes = MethodTypeClassificator.INSTANCE.computeMethodTypes(ClassUnderTest.class, ClassUnderTest.class.getMethod("getStrField"));
+        MethodClassifications getStrFieldTypes = MethodTypeClassificator.INSTANCE.classify(ClassUnderTest.class, ClassUnderTest.class.getMethod("getStrField"));
         assertFalse(getStrFieldTypes.isEmpty());
         assertEquals("only a single method type is expected but classification result contains more", 1, getStrFieldTypes.size());
         assertTrue("expectation was a classification as Getter", getStrFieldTypes.contains( MethodType.Getter));
         
-        MethodClassifications setStrFieldTypes = MethodTypeClassificator.INSTANCE.computeMethodTypes(ClassUnderTest.class, ClassUnderTest.class.getMethod("setStrField", String.class));
+        MethodClassifications setStrFieldTypes = MethodTypeClassificator.INSTANCE.classify(ClassUnderTest.class, ClassUnderTest.class.getMethod("setStrField", String.class));
         assertFalse(setStrFieldTypes.isEmpty());
         assertEquals("only a single method type is expected but classification result contains more", 1, setStrFieldTypes.size());
         assertTrue("expectation was a classification as Setter", setStrFieldTypes.contains( MethodType.Setter));
+    }
+    
+    @Test
+    public void testContains() {
+        
     }
     
     

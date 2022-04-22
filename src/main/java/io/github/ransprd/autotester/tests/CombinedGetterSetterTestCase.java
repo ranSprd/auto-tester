@@ -24,10 +24,18 @@ import io.github.ransprd.autotester.analyzer.detectors.MethodType;
 public class CombinedGetterSetterTestCase {
     
     public boolean isTestable(MethodTestCaseContext testContext) {
-        return testContext.getMethodData().contains(MethodType.Getter, MethodType.Setter);
+        return false;
+    }
+    
+    public boolean isTestable(FieldTestCaseContext testContext) {
+        return testContext.containsMethods(MethodType.Getter, MethodType.Setter);
     }
     
     public void executeTestCase(MethodTestCaseContext testContext) {
+    }
+    
+    public void executeTestCase(FieldTestCaseContext testContext) {
+//        testContext.getFieldData().
     }
     
 }

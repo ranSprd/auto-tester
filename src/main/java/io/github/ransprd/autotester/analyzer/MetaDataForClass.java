@@ -19,6 +19,7 @@ import io.github.ransprd.autotester.analyzer.detectors.MethodTypeClassificator;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +51,9 @@ public class MetaDataForClass {
         return allMethods;
     }
     
-    
+    public Collection<MetaDataForField> getAllFields() {
+        return allFields.values();
+    }
     
     /**
      * 
@@ -89,9 +92,17 @@ public class MetaDataForClass {
         }
 
         void registerMethod(Method method) {
+            MetaDataForMethod methodData = new MetaDataForMethod(method, 
+                    MethodTypeClassificator.INSTANCE.classify(instance.clazz, method));
+            
+            // add a "method reference" to each field
+            methodData.getUsedFields().stream()
+                    .map(field -> instance.findField(field.getName()))
+                    .filter(Optional::isPresent)
+                    .forEach(fieldData -> fieldData.get().addMethod(methodData));
+            
             instance.allMethods.add(
-                    new MetaDataForMethod(method, 
-                         MethodTypeClassificator.INSTANCE.computeMethodTypes(instance.clazz, method)));
+                     methodData);
         }
     }
     

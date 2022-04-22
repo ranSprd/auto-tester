@@ -17,6 +17,7 @@ package io.github.ransprd.autotester.analyzer.detectors;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -43,7 +44,11 @@ public class MethodClassifications {
      */
     public MethodClassifications(MethodType methodType, Field singleField) {
         this( new ArrayList());
-        classifications.add( new MethodTypeData(methodType, List.of(singleField)));
+        if (singleField == null) {
+            classifications.add( new MethodTypeData(methodType, List.of()));
+        } else {
+            classifications.add( new MethodTypeData(methodType, List.of(singleField)));
+        }
     }
 
     /**
@@ -53,7 +58,10 @@ public class MethodClassifications {
     public MethodClassifications(List<MethodTypeData> types) {
         this.classifications = (types == null) ? new ArrayList() : types;
     }
-    
+
+    public MethodClassifications() {
+        this(null);
+    }
     
     /**
      * check if there is a classification of given type
@@ -67,11 +75,11 @@ public class MethodClassifications {
     /**
      * 
      * @param types
-     * @return true if all given types are contained. If the given list is empty 
+     * @return true if ALL given types are contained. If the given list is empty 
      * then the result is alway false.
      */
     public boolean contains(MethodType... types) {
-        if (types == null || types.length < 1 || classifications.isEmpty()) {
+        if (types == null || types.length < 1 || classifications.size() < types.length) {
             return false;
         }
         
@@ -93,6 +101,13 @@ public class MethodClassifications {
 
     public boolean isEmpty() {
         return classifications.isEmpty();
+    }
+    
+    public Collection<Field> getUsedFields() {
+        return classifications.stream()
+                    .flatMap(meta -> meta.fields().stream())
+                    .distinct()
+                    .toList();
     }
     
     public List<MethodTypeData> getClassifications() {

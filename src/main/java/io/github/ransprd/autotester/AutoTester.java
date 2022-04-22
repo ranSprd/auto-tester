@@ -17,6 +17,7 @@ package io.github.ransprd.autotester;
 
 import io.github.ransprd.autotester.analyzer.ClassAnalyzer;
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
+import io.github.ransprd.autotester.analyzer.MetaDataForField;
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
 import java.util.List;
 
@@ -41,11 +42,16 @@ public class AutoTester {
     
     public boolean test() {
         MetaDataForClass classData = ClassAnalyzer.analyze(targetTestClass);
+        classData.getAllFields().stream().forEach(field -> testField(classData, field));
         classData.getAllMethods().stream().forEach(method -> testMethod(classData, method));
         return true;
     }
     
     private boolean testMethod(MetaDataForClass classData, MetaDataForMethod methodData) {
+        return true;
+    }
+    
+    private boolean testField(MetaDataForClass classData, MetaDataForField fieldData) {
         return true;
     }
     

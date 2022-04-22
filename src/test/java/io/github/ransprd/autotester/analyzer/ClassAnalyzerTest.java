@@ -15,6 +15,7 @@
  */
 package io.github.ransprd.autotester.analyzer;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
@@ -30,6 +31,11 @@ public class ClassAnalyzerTest {
     public void testSeveralFieldsWithSameNameExist() {
         ClassAnalyzer analyzer = new ClassAnalyzer();
         MetaDataForClass metaData = analyzer.analyze(ClassUnderTest.class);
+        
+        Collection<MetaDataForField> fields = metaData.getAllFields();
+        assertNotNull(fields);
+        assertFalse(fields.isEmpty());
+        assertEquals("expected number of fields failed", 2, fields.size());
         
         Optional<MetaDataForField> overwrittenFieldDef = metaData.findField("overwrittenfield");
         assertTrue(overwrittenFieldDef.isPresent());

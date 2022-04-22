@@ -16,8 +16,11 @@
 package io.github.ransprd.autotester.analyzer;
 
 import io.github.ransprd.autotester.analyzer.detectors.MethodClassifications;
+import io.github.ransprd.autotester.analyzer.detectors.MethodType;
 import java.util.List;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -30,6 +33,17 @@ public class MetaDataForMethodTest {
     public void testGetMethod() throws NoSuchMethodException {
         MetaDataForMethod testInstance = new MetaDataForMethod( Object.class.getMethod("toString"), new MethodClassifications(List.of()));
         assertNotNull(testInstance.getMethod());
+    }
+    
+    @Test
+    public void testContainsAll() throws NoSuchMethodException {
+        MetaDataForMethod testInstance = new MetaDataForMethod( Object.class.getMethod("toString"), 
+                                         new MethodClassifications( MethodType.Getter, null));
+        
+        assertFalse( testInstance.contains(MethodType.Setter));
+        assertFalse( testInstance.contains(MethodType.Setter, MethodType.Getter));
+        assertTrue( testInstance.contains(MethodType.Getter));
+        
     }
     
 }

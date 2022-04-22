@@ -37,6 +37,24 @@ public class MetaDataForFieldTest {
     }
     
     
+    @Test
+    public void testAddMethod() throws NoSuchFieldException {
+        Field field = ClassUnderTest.class.getDeclaredField("field");
+        MetaDataForField testInstance = new MetaDataForField();
+        testInstance.setField( field);
+        assertFalse(testInstance.addMethod(null));
+        
+        MetaDataForMethod e = new MetaDataForMethod( null, null);
+        assertFalse(testInstance.addMethod(e));
+    }
+    
+    @Test
+    public void testGetUsedMethods() {
+        MetaDataForField testInstance = new MetaDataForField();
+        assertNotNull(testInstance.getUsedByMethods());
+    }
+    
+    
     private class ClassUnderTest {
         private String field;
     }
