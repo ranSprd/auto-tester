@@ -22,7 +22,7 @@ class ObjectUnderTestFactory {
 
     ObjectUnderTestFactory() {
         addObjectFactory(char.class, type -> 'c');
-        addObjectFactory(Character.class, type -> new Character('c'));
+        addObjectFactory(Character.class, type -> 'c');
 
         addObjectFactory(boolean.class, type -> true);
         addObjectFactory(Boolean.class, type -> Boolean.TRUE);
@@ -91,7 +91,7 @@ class ObjectUnderTestFactory {
         throw new IllegalArgumentException("Factory not found for type: " + clz);
     }
 
-    public void addObjectFactory(Class<?> clazz, Function<Class<?>, ?> factory) {
+    public final void addObjectFactory(Class<?> clazz, Function<Class<?>, ?> factory) {
         if (objectFactories.containsKey(clazz)) {
             objectFactories.put(clazz, factory); // override existing factory
         } else { // insert before Object
