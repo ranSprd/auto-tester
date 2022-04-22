@@ -18,7 +18,9 @@ import java.util.function.Function;
  */
 public final class ObjectReflectionTools {
     
-    public static List<String> GETTER_PREFIXES = Arrays.asList("get", "is", "has", "can", "should");
+    public static final List<String> GETTER_PREFIXES = Arrays.asList("get", "is", "has", "can", "should");
+    public static final String CLASS_MUST_NOT_BE_NULL = "Class must not be null";
+    public static final String FIELD_MUST_NOT_BE_NULL = "Field must not be null";
 
     private ObjectReflectionTools() {
     }
@@ -34,7 +36,7 @@ public final class ObjectReflectionTools {
     }
 
     public static Optional<Field> findField(Class<?> clazz, String fieldName) {
-        Objects.requireNonNull(clazz, "Class must not be null");
+        Objects.requireNonNull(clazz, CLASS_MUST_NOT_BE_NULL);
         
         Class<?> current = clazz;
         do {
@@ -50,7 +52,7 @@ public final class ObjectReflectionTools {
     }
 
     public static List<Field> getAllDeclaredFields(Class<?> clazz, boolean useSuperclass) {
-        Objects.requireNonNull(clazz, "Class must not be null");
+        Objects.requireNonNull(clazz, CLASS_MUST_NOT_BE_NULL);
         List<Field> fields = new LinkedList<>();
         Class<?> current = clazz;
         do {
@@ -83,7 +85,7 @@ public final class ObjectReflectionTools {
      * @return 
      */
     public static Method findMethod(Class<?> clazz, String name, Class<?>... paramTypes) {
-        Objects.requireNonNull(clazz, "Class must not be null");
+        Objects.requireNonNull(clazz, CLASS_MUST_NOT_BE_NULL);
         Objects.requireNonNull(name, "Method name must not be null");
         Class<?> searchType = clazz;
         while (searchType != null) {
@@ -106,8 +108,8 @@ public final class ObjectReflectionTools {
      * @return 
      */
     public static Method findGetter(Class<?> clazz,  Field field, boolean includeParentClasses) {
-        Objects.requireNonNull(clazz, "Class must not be null");
-        Objects.requireNonNull(field, "Field must not be null");
+        Objects.requireNonNull(clazz, CLASS_MUST_NOT_BE_NULL);
+        Objects.requireNonNull(field, FIELD_MUST_NOT_BE_NULL);
 
         String lowerCaseFieldName = field.getName().toLowerCase();
         
@@ -136,8 +138,8 @@ public final class ObjectReflectionTools {
     }
     
     public static Method findSetter(Class<?> clazz,  Field field, boolean includeParentClasses) {
-        Objects.requireNonNull(clazz, "Class must not be null");
-        Objects.requireNonNull(field, "Field must not be null");
+        Objects.requireNonNull(clazz, CLASS_MUST_NOT_BE_NULL);
+        Objects.requireNonNull(field, FIELD_MUST_NOT_BE_NULL);
 
         String lowerCaseSetterName = "set" +field.getName().toLowerCase();
         
@@ -169,7 +171,7 @@ public final class ObjectReflectionTools {
     }
 
     public static List<Method> getAllDeclaredMethods(Class<?> clazz) {
-        Objects.requireNonNull(clazz, "Class must not be null");
+        Objects.requireNonNull(clazz, CLASS_MUST_NOT_BE_NULL);
         List<Method> methods = new LinkedList<>();
         Collections.addAll(methods, clazz.getDeclaredMethods());
         List<Method> defaultMethods = findConcreteMethodsOnInterfaces(clazz);
