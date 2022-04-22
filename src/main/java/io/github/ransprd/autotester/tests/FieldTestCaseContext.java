@@ -48,16 +48,16 @@ public class FieldTestCaseContext {
         if (methodTypes == null || methodTypes.length < 1) {
             return false;
         }
-        Collection<MethodType> allMethodTypes = fieldData.getAllMethodTypes();
+        Collection<MethodType> allMethodClassifications = fieldData.getAllMethodTypes();
         
         // number of found classifications for the methods of field are lower then the
         // required number - it is not possible that all types are available
-        if (allMethodTypes.size() < methodTypes.length) {
+        if (allMethodClassifications.size() < methodTypes.length) {
             return false;
         }
         
         for(MethodType type : methodTypes) {
-            if (!allMethodTypes.contains(type)) {
+            if (!allMethodClassifications.contains(type)) {
                 return false;
             }
         }
