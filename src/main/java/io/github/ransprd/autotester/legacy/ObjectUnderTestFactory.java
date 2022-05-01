@@ -16,11 +16,11 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
 
-class ObjectUnderTestFactory {
+public class ObjectUnderTestFactory {
     private HashMap<Class<?>, Function<Class<?>, ?>> objectFactories = new HashMap<>();
     private LinkedList<Class<?>> objectFactoriesOrder = new LinkedList<>();
 
-    ObjectUnderTestFactory() {
+    public ObjectUnderTestFactory() {
         addObjectFactory(char.class, type -> 'c');
         addObjectFactory(Character.class, type -> 'c');
 

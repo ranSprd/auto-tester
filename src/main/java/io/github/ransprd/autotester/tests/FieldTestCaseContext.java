@@ -15,23 +15,36 @@
  */
 package io.github.ransprd.autotester.tests;
 
+import com.github.nylle.javafixture.Fixture;
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForField;
+import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
 import io.github.ransprd.autotester.analyzer.detectors.MethodType;
+import io.github.ransprd.autotester.legacy.ObjectUnderTestFactory;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author ranSprd
  */
 public class FieldTestCaseContext {
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(FieldTestCaseContext.class);
     
     private final MetaDataForClass classData;
     private final MetaDataForField fieldData;
 
     public FieldTestCaseContext(MetaDataForClass classData, MetaDataForField fieldData) {
         this.classData = classData;
+        if (fieldData == null) {
+            throw new NullPointerException("can not test an empty field");
+        }
         this.fieldData = fieldData;
     }
 
@@ -41,6 +54,10 @@ public class FieldTestCaseContext {
 
     public MetaDataForField getFieldData() {
         return fieldData;
+    }
+
+    public Field getField() {
+        return fieldData.getField();
     }
     
     public boolean containsMethods(MethodType... methodTypes) {
@@ -62,6 +79,43 @@ public class FieldTestCaseContext {
             }
         }
         return true;
+    }
+    
+    public List<MetaDataForMethod> getMethodsClassifiedAs(MethodType methodType) {
+        if (methodType == null) {
+            return List.of();
+        }
+        return fieldData.getUsedByMethods().stream()
+                            .filter(m -> m.contains(methodType))
+                            .toList();
+    }
+    
+    
+    public Object createTestableClassInstance() {
+        Constructor[] ctors = classData.getClazzUnderTest().getDeclaredConstructors();
+        Constructor ctor = null;
+        for (int i = 0; i < ctors.length; i++) {
+            ctor = ctors[i];
+            if (ctor.getParameterCount() == 0) {
+//            if (ctor.getGenericParameterTypes().length == 0) {
+                break;
+            }
+        }
+        ctor.setAccessible(true);
+        try {
+            return ctor.newInstance();
+            
+//        Fixture fixture = new Fixture();
+//        return fixture.build(classData.getClazzUnderTest());
+        } catch (Exception ex) {
+            log.error("Can not find a non-args constructor for class [{}]", classData.getClazzUnderTest().getName());
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    
+    public Object createFieldValue() {
+        return new ObjectUnderTestFactory().createObject( fieldData.getType());
     }
     
 }

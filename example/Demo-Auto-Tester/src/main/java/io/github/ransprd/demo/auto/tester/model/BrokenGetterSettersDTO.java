@@ -13,38 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.ransprd.autotester;
-
-import org.junit.Test;
-import static org.junit.Assert.*;
+package io.github.ransprd.demo.auto.tester.model;
 
 /**
  *
  * @author ranSprd
  */
-public class AutoTesterTest {
-    
-    @Test
-    public void testGivenClassIsNull() {
-        assertThrows(NullPointerException.class, () -> AutoTester.forClass(null));
-    }
-    
-    @Test 
-    public void testHappyCase() {
-        AutoTester.forClass( ClassUnderTest.class).test();
-    }
-    
-    
-    public class ClassUnderTest {
-        private String field;
+public class BrokenGetterSettersDTO {
 
-        public String getField() {
-            return field;
-        }
+    private int field1;
+    private int field2 = 3;
 
-        public void setField(String field) {
-            this.field = field;
-        }
+    public int getField1() {
+        return field1;
     }
+
+    public void setField1(int field1) {
+        this.field2 = field1;
+    }
+
+    public int getField2() {
+        return field2;
+    }
+
+    public void setField2(int field2) {
+        this.field1 = field2;
+    }
+    
     
 }

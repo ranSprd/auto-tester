@@ -35,6 +35,10 @@ public class MetaDataForField {
     public MetaDataForField() {
     }
 
+    public Field getField() {
+        return field;
+    }
+    
     public void setField(Field field) {
         this.field = field;
     }
@@ -47,6 +51,10 @@ public class MetaDataForField {
         return field.getModifiers();
     }
 
+    /**
+     * Returns a Class object that identifies the declared type for the field represented by this Field object.
+     * @return 
+     */
     public Class<?> getType() {
         return field.getType();
     }
@@ -63,6 +71,10 @@ public class MetaDataForField {
         return (parentFields != null && !parentFields.isEmpty());
     }
 
+    /**
+     * All methods using this field 
+     * @return 
+     */
     public List<MetaDataForMethod> getUsedByMethods() {
         return usedByMethods;
     }

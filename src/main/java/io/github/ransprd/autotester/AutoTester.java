@@ -19,7 +19,12 @@ import io.github.ransprd.autotester.analyzer.ClassAnalyzer;
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForField;
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
+import io.github.ransprd.autotester.tests.CombinedGetterSetterTestCase;
+import io.github.ransprd.autotester.tests.FieldTestCaseContext;
+import io.github.ransprd.autotester.tests.TestCaseFailureResult;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  *
@@ -35,6 +40,9 @@ public class AutoTester {
     }
     
     private final Class targetTestClass;
+    
+    private final List<CombinedGetterSetterTestCase> testCases = 
+            Arrays.asList(new CombinedGetterSetterTestCase());
 
     private AutoTester(Class targetTestClass) {
         this.targetTestClass = targetTestClass;
@@ -42,7 +50,13 @@ public class AutoTester {
     
     public boolean test() {
         MetaDataForClass classData = ClassAnalyzer.analyze(targetTestClass);
-        classData.getAllFields().stream().forEach(field -> testField(classData, field));
+        List<TestCaseFailureResult> failures = classData.getAllFields().stream()
+                        .map(field -> testField(classData, field))
+                        .flatMap(fails -> fails.stream())
+                        .toList();
+        if (!failures.isEmpty()) {
+            new AssertionError("There are test failed tests");
+        }
         classData.getAllMethods().stream().forEach(method -> testMethod(classData, method));
         return true;
     }
@@ -51,9 +65,14 @@ public class AutoTester {
         return true;
     }
     
-    private boolean testField(MetaDataForClass classData, MetaDataForField fieldData) {
-        
-        return true;
+    private List<TestCaseFailureResult> testField(MetaDataForClass classData, MetaDataForField fieldData) {
+        FieldTestCaseContext context = new FieldTestCaseContext(classData, fieldData);
+        return testCases.stream()
+                    .filter(testCase -> testCase.isTestable(context))
+                    .map( testCase -> testCase.executeTestCase(context))
+                    .flatMap(failures -> failures.stream())
+                    .toList()
+                    ;
     }
     
 }

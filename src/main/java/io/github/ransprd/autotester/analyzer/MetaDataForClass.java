@@ -31,13 +31,17 @@ import java.util.Optional;
  */
 public class MetaDataForClass {
     
-    private final Class<?> clazz;
+    private final Class<?> clazzUnderTest;
     
     private final List<MetaDataForMethod> allMethods = new ArrayList<>();
     private final Map<String, MetaDataForField> allFields = new HashMap<>();
     
     public MetaDataForClass(Class<?> clazz) {
-        this.clazz = clazz;
+        this.clazzUnderTest = clazz;
+    }
+
+    public Class<?> getClazzUnderTest() {
+        return clazzUnderTest;
     }
     
     public Optional<MetaDataForField> findField(String fieldName) {
@@ -82,7 +86,7 @@ public class MetaDataForClass {
             String normalizedFieldName = field.getName().toLowerCase();
             MetaDataForField fieldEntry = instance.allFields.computeIfAbsent(normalizedFieldName, x -> new MetaDataForField());
             
-            if (field.getDeclaringClass().equals( instance.clazz)) {
+            if (field.getDeclaringClass().equals( instance.clazzUnderTest)) {
                 // field of the target class, we expect that a field is not already set (no check)
                 fieldEntry.setField(field);
             } else {
@@ -93,7 +97,7 @@ public class MetaDataForClass {
 
         void registerMethod(Method method) {
             MetaDataForMethod methodData = new MetaDataForMethod(method, 
-                    MethodTypeClassificator.INSTANCE.classify(instance.clazz, method));
+                    MethodTypeClassificator.INSTANCE.classify(instance.clazzUnderTest, method));
             
             // add a "method reference" to each field
             methodData.getUsedFields().stream()

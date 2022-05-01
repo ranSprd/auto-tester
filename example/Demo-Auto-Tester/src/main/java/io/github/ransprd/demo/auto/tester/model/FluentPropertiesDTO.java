@@ -43,7 +43,4 @@ public class FluentPropertiesDTO {
         return this;
     }
     
-    
-    
-    
 }
