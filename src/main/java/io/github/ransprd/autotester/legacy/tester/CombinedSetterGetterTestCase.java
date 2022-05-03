@@ -4,6 +4,7 @@ import io.github.ransprd.autotester.legacy.OldAutoTesterContext;
 import io.github.ransprd.autotester.ObjectReflectionTools;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -15,7 +16,12 @@ public class CombinedSetterGetterTestCase extends BaseMethodTestCase implements 
     @Override
     public void accept(OldAutoTesterContext context) {
         String fieldName = context.getTestedFieldName();
-        Field field = ObjectReflectionTools.findField(context.getTestedType(), fieldName).get();
+        
+        Optional<Field> fieldForName = ObjectReflectionTools.findField(context.getTestedType(), fieldName);
+        if (fieldForName.isEmpty()) {
+            return;
+        }
+        Field field = fieldForName.get();
         final boolean includeParentClasses = context.getConfig().isTestSuperclassFields();
 
         Method setter = ObjectReflectionTools.findSetter(context.getTestedType(), field, includeParentClasses);
