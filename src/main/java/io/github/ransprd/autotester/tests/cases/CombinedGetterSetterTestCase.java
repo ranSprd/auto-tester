@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.ransprd.autotester.tests;
+package io.github.ransprd.autotester.tests.cases;
 
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
 import io.github.ransprd.autotester.analyzer.detectors.MethodType;
+import io.github.ransprd.autotester.tests.FieldTestCaseContext;
+import io.github.ransprd.autotester.tests.MethodTestCaseContext;
+import io.github.ransprd.autotester.tests.TestCase;
+import io.github.ransprd.autotester.tests.TestCaseFailureResult;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;

@@ -15,6 +15,7 @@
  */
 package io.github.ransprd.autotester.tests;
 
+import io.github.ransprd.autotester.tests.cases.CombinedGetterSetterTestCase;
 import io.github.ransprd.autotester.analyzer.ClassAnalyzer;
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForField;

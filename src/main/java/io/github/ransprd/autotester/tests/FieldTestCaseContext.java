@@ -15,6 +15,7 @@
  */
 package io.github.ransprd.autotester.tests;
 
+import io.github.ransprd.autotester.ObjectReflectionTools;
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForField;
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
@@ -88,17 +89,10 @@ public class FieldTestCaseContext {
     
     
     public Object createTestableClassInstance() {
-        Constructor[] ctors = classData.getClazzUnderTest().getDeclaredConstructors();
-        for (int i = 0; i < ctors.length; i++) {
-            Constructor ctor = ctors[i];
-            if (ctor.getParameterCount() == 0) {
-                ctor.setAccessible(true);
-                try {
-                    return ctor.newInstance();
-                } catch (Exception ex) {
-                    log.error("Can not find a non-args constructor for class [{}]", classData.getClazzUnderTest().getName());
-                }
-            }
+        try {
+            return ObjectReflectionTools.newInstance( getClassData().getClazzUnderTest());
+        } catch (Exception e) {
+            log.error("Can not call the non-args constructor of class [{}]", getClassData().getClazzUnderTest().getName());
         }
         return null;
     }

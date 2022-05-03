@@ -19,7 +19,7 @@ import io.github.ransprd.autotester.analyzer.ClassAnalyzer;
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForField;
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
-import io.github.ransprd.autotester.tests.CombinedGetterSetterTestCase;
+import io.github.ransprd.autotester.tests.cases.CombinedGetterSetterTestCase;
 import io.github.ransprd.autotester.tests.FieldTestCaseContext;
 import io.github.ransprd.autotester.tests.TestCaseFailureResult;
 import java.util.ArrayList;

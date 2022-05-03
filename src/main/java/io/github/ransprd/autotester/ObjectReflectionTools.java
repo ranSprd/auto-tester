@@ -1,5 +1,6 @@
 package io.github.ransprd.autotester;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
@@ -193,14 +194,41 @@ public final class ObjectReflectionTools {
     }
 
     public static <T> T newInstance(Class<T> clazz) {
-        Objects.requireNonNull(clazz, "Clazz must not be null");
+        Objects.requireNonNull(clazz, "Clazz of instance must not be null");
+        
+        if (!isStatic(clazz) && isInnerClass(clazz)) {
+            // a non static inner class has an additional parameter for all constructors
+            Class<?> enclosingClass = clazz.getEnclosingClass();
+            if (enclosingClass != null) {
+                try {
+                    Constructor<T> constructor = clazz.getDeclaredConstructor( enclosingClass);
+                    if (constructor != null) {
+                        Object enclosingInstance = enclosingClass.getDeclaredConstructor().newInstance();
+                        return constructor.newInstance( enclosingInstance);
+                    }
+                } catch (Exception e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        }
+
         try {
             return clazz.getDeclaredConstructor().newInstance();
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
     }
-
+    
+    public static boolean isStatic(Class<?> clazz) {
+        return Modifier.isStatic(clazz.getModifiers());
+    }
+    
+    public static boolean isInnerClass(Class<?> clazz) {
+        return clazz.getEnclosingClass() != null && 
+                        !clazz.isAnonymousClass() && 
+                        !clazz.isSynthetic();
+    }
+    
     private static List<Method> findConcreteMethodsOnInterfaces(Class<?> clazz) {
         List<Method> result = null;
         for (Class<?> ifc : clazz.getInterfaces()) {

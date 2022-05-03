@@ -1,5 +1,6 @@
 package io.github.ransprd.autotester;
 
+import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.fixtures.ChildType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -7,6 +8,8 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.stream.Stream;
 import org.junit.Assert;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 public class ObjectReflectionToolsTest {
@@ -94,6 +97,21 @@ public class ObjectReflectionToolsTest {
         Assert.assertFalse(ObjectReflectionTools.findField(ClassUnderTest.class, "notExistingField").isPresent());
     }
     
+    @Test
+    public void testInnerClassesLogic() {
+        assertFalse( ObjectReflectionTools.isInnerClass(Object.class));
+        assertFalse( ObjectReflectionTools.isStatic(Object.class));
+        
+        assertTrue( ObjectReflectionTools.isInnerClass(InnerClass1.class));
+        assertFalse( ObjectReflectionTools.isStatic(InnerClass1.class));
+        
+        assertTrue( ObjectReflectionTools.isInnerClass(InnerClass2.class));
+        assertFalse( ObjectReflectionTools.isStatic(InnerClass2.class));
+        
+        assertTrue( ObjectReflectionTools.isInnerClass(InnerClass3.class));
+        assertTrue( ObjectReflectionTools.isStatic(InnerClass3.class));
+    }
+    
     // helpers
     private String[] toArray(String... strings) {
         return strings;
@@ -107,6 +125,15 @@ public class ObjectReflectionToolsTest {
     
     private class ParentClassUnderTest {
         private double parentDoubleParam;
+    }
+    
+    public class InnerClass1 {
+    }
+    
+    private class InnerClass2 {
+    }
+    
+    public static class InnerClass3 {
     }
     
 }
