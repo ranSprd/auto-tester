@@ -131,5 +131,26 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+      <profile>
+        <id>analysis</id>
+        <properties>
+          <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+          <sonar.organization>ransprd</sonar.organization>
+          <sonar.projectKey>ranSprd_auto-tester</sonar.projectKey>
+          <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        </properties>
+        <build>
+          <plugins>
+            <plugin>
+              <groupId>org.sonarsource.scanner.maven</groupId>
+              <artifactId>sonar-maven-plugin</artifactId>
+              <version>3.9.1.2184</version>
+            </plugin>
+          </plugins>          
+        </build>
+      </profile>
+    </profiles>
 
 </project>
