@@ -44,6 +44,10 @@ public class MetaDataForClass {
         return clazzUnderTest;
     }
     
+    public String getNameOfClazzUnderTest() {
+        return clazzUnderTest.getCanonicalName();
+    }
+    
     public Optional<MetaDataForField> findField(String fieldName) {
         if (fieldName == null) {
             return Optional.empty();

@@ -26,7 +26,7 @@ public class AutoTesterTest {
     
     @Test
     public void testGivenClassIsNull() {
-        assertThrows(NullPointerException.class, () -> AutoTester.forClass(null));
+        NullPointerException assertThrows = assertThrows(NullPointerException.class, () -> AutoTester.forClass(null));
     }
     
     @Test 

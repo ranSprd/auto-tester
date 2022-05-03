@@ -22,6 +22,7 @@ import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
 import io.github.ransprd.autotester.tests.CombinedGetterSetterTestCase;
 import io.github.ransprd.autotester.tests.FieldTestCaseContext;
 import io.github.ransprd.autotester.tests.TestCaseFailureResult;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -49,13 +50,14 @@ public class AutoTester {
     }
     
     public boolean test() {
+        StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
         MetaDataForClass classData = ClassAnalyzer.analyze(targetTestClass);
         List<TestCaseFailureResult> failures = classData.getAllFields().stream()
                         .map(field -> testField(classData, field))
                         .flatMap(fails -> fails.stream())
                         .toList();
         if (!failures.isEmpty()) {
-            new AssertionError("There are test failed tests");
+            throw AutoTesterAssertionError.build(targetTestClass.getCanonicalName(), failures, getStackTrace("test"));
         }
         classData.getAllMethods().stream().forEach(method -> testMethod(classData, method));
         return true;
@@ -73,6 +75,32 @@ public class AutoTester {
                     .flatMap(failures -> failures.stream())
                     .toList()
                     ;
+    }
+    
+    
+    /**
+     * Create a stacktrace of the current call and remove some trace elements
+     * .
+     * @param methodName everything before AutoTester.$methodName will be removed
+     * @return 
+     */
+    private StackTraceElement[] getStackTrace(String methodName) {
+        String clazzName = AutoTester.class.getCanonicalName();
+        StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+        boolean use = false;
+        List<StackTraceElement> list = new ArrayList<>();
+        
+        for(StackTraceElement element : stacktrace) {
+            if (use) {
+                list.add(element);
+            } else if (element.getClassName().equals( clazzName)) {
+                if (element.getMethodName().equals(methodName)) {
+                    use = true;
+                }
+            }
+        }
+        
+        return list.toArray(StackTraceElement[]::new);
     }
     
 }

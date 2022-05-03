@@ -27,20 +27,26 @@ import org.slf4j.LoggerFactory;
  *
  * @author ranSprd
  */
-public class CombinedGetterSetterTestCase {
+public class CombinedGetterSetterTestCase extends TestCase {
     private static final Logger log = LoggerFactory.getLogger(CombinedGetterSetterTestCase.class);
     
+    private static final String NAME = "Getter/Setter cycle check";
+    
+    @Override
     public boolean isTestable(MethodTestCaseContext testContext) {
         return false;
     }
     
+    @Override
     public boolean isTestable(FieldTestCaseContext testContext) {
         return testContext.containsMethods(MethodType.Getter, MethodType.Setter);
     }
     
+    @Override
     public void executeTestCase(MethodTestCaseContext testContext) {
     }
     
+    @Override
     public List<TestCaseFailureResult> executeTestCase(FieldTestCaseContext testContext) {
         List<MetaDataForMethod> getters = testContext.getMethodsClassifiedAs(MethodType.Getter);
         List<MetaDataForMethod> setters = testContext.getMethodsClassifiedAs(MethodType.Setter);
@@ -62,42 +68,35 @@ public class CombinedGetterSetterTestCase {
     }
     
     private TestCaseFailureResult testGetterSetterCycle(FieldTestCaseContext testContext, Method getter, Method setter) {
-        log.debug("start checking Getter/Setter cycle for field [{}]", testContext.getFieldData().getName());
+        log.debug("start checking " +NAME + " for field [{}]", testContext.getFieldData().getName());
         
         
-        Object fieldValue1 = null;
+        Object value = null;
         Object received = null;
+        Object instanceUnderTest = testContext.createTestableClassInstance();
+        if (instanceUnderTest == null) {
+            return fail("Can not instantiate class <" +testContext.getClassData().getNameOfClazzUnderTest() +"> for " +NAME);
+        }
+        
         try {
-            
-            Object instanceUnderTest = testContext.createTestableClassInstance();
-            fieldValue1 = testContext.createFieldValue();
+            value = testContext.createFieldValue();
             setter.setAccessible(true);
             getter.setAccessible(true);
             
-            setter.invoke(instanceUnderTest, fieldValue1);
+            setter.invoke(instanceUnderTest, value);
             received = getter.invoke(instanceUnderTest);
         } catch (Throwable e) {
-            e.printStackTrace();
-            return fail("Calling setter/getter cycle failed", e);
+            return fail("Can not call setter/getter of class " +testContext.getClassData().getNameOfClazzUnderTest(), e);
         }
-            
 
-        if (!fieldValue1.equals(received)) {
+        if (!value.equals(received)) {
             log.debug("fields not equal");
-            return fail("The setter returns a different result than was set with the getter" );
+            return fail("The getter returns a different result than was set with the setter" );
         } else {
             log.debug("fields are equal");
         }
 
         return null;
     }
-    
-    public TestCaseFailureResult fail(String message, Throwable throwable) {
-        return new TestCaseFailureResult(message, throwable);
-    }
-    public TestCaseFailureResult fail(String message) {
-        return fail(message, null);
-    }
-    
     
 }
