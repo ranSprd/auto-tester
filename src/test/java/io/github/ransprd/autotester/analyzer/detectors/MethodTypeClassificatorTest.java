@@ -40,13 +40,6 @@ public class MethodTypeClassificatorTest {
         assertTrue("expectation was a classification as Setter", setStrFieldTypes.contains( MethodType.Setter));
     }
     
-    @Test
-    public void testContains() {
-        
-    }
-    
-    
-    
     private class ClassUnderTest {
         
         private String strField;

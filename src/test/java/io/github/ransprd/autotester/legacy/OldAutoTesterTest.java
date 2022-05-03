@@ -10,12 +10,4 @@ public class OldAutoTesterTest {
         OldAutoTester.forClass(ChildType.class).test();
     }
 
-    @Test
-    public void testCreators() {
-        OldAutoTester pojoTester = OldAutoTester.forClass(Object.class);
-
-        ObjectUnderTestFactory objectFactory = new ObjectUnderTestFactory();
-        objectFactory.createObject(String[].class);
-    }
-
 }

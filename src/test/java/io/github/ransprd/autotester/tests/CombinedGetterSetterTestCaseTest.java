@@ -51,6 +51,9 @@ public class CombinedGetterSetterTestCaseTest {
         
         CombinedGetterSetterTestCase testCase = new CombinedGetterSetterTestCase();
         List<TestCaseFailureResult> result = testCase.executeTestCase(testContext);
+        
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
     }
     
     
