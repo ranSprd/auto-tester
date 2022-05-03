@@ -32,4 +32,10 @@ public class MetaDataForClassTest {
         assertTrue( testInstance.findField("clazz").isEmpty());
     }
     
+    @Test
+    public void testDelegatedMethods() {
+        MetaDataForClass testInstance = new MetaDataForClass(String.class);
+        assertEquals( String.class.getCanonicalName(), testInstance.getNameOfClazzUnderTest());
+    }
+    
 }

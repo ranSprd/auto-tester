@@ -31,6 +31,8 @@ public class MetaDataForFieldTest {
         MetaDataForField testInstance = new MetaDataForField();
         testInstance.setField( field);
         
+        assertNotNull(testInstance.getField());
+        assertEquals(field, testInstance.getField());
         assertEquals( field.getName(), testInstance.getName());
         assertEquals( field.getModifiers(), testInstance.getModifiers());
         assertEquals( field.getType(), testInstance.getType());
