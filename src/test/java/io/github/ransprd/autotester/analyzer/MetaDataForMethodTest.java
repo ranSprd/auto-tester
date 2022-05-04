@@ -55,5 +55,4 @@ public class MetaDataForMethodTest {
         assertNotNull(testInstance2.getMethodClassifications());
     }
     
-    
 }

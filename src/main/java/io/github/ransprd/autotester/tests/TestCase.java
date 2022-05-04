@@ -16,6 +16,7 @@
 package io.github.ransprd.autotester.tests;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -27,7 +28,7 @@ public abstract class TestCase {
     public abstract boolean isTestable(MethodTestCaseContext testContext);
     public abstract boolean isTestable(FieldTestCaseContext testContext);
     
-    public abstract void executeTestCase(MethodTestCaseContext testContext);
+    public abstract List<TestCaseFailureResult> executeTestCase(MethodTestCaseContext testContext);
     public abstract List<TestCaseFailureResult> executeTestCase(FieldTestCaseContext testContext);
     
     public TestCaseFailureResult fail(String message, Throwable throwable) {
@@ -36,6 +37,10 @@ public abstract class TestCase {
 
     public TestCaseFailureResult fail(String message) {
         return fail(message, null);
+    }
+    
+    public String generateTestCaseId() {
+        return UUID.randomUUID().toString();
     }
     
 }

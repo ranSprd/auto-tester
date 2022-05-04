@@ -47,7 +47,8 @@ public class CombinedGetterSetterTestCase extends TestCase {
     }
     
     @Override
-    public void executeTestCase(MethodTestCaseContext testContext) {
+    public List<TestCaseFailureResult>  executeTestCase(MethodTestCaseContext testContext) {
+        return List.of();
     }
     
     @Override
@@ -90,12 +91,16 @@ public class CombinedGetterSetterTestCase extends TestCase {
             setter.invoke(instanceUnderTest, value);
             received = getter.invoke(instanceUnderTest);
         } catch (Throwable e) {
-            return fail("Can not call setter/getter of class " +testContext.getClassData().getNameOfClazzUnderTest(), e);
+            return fail("Can not call setter/getter for field "
+                    + testContext.getFieldName()
+                    + " of class " +testContext.getClassData().getNameOfClazzUnderTest(), e);
         }
 
         if (!value.equals(received)) {
             log.debug("fields not equal");
-            return fail("The getter returns a different result than was set with the setter" );
+            return fail("The getter of field [" 
+                    +testContext.getFieldName()
+                    + "] returns a different result than was set with the setter" );
         } else {
             log.debug("fields are equal");
         }

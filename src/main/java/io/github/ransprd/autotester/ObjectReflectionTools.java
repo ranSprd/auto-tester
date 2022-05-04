@@ -167,8 +167,9 @@ public final class ObjectReflectionTools {
     }
 
     public static List<Method> getAllMethods(Class<?> searchType) throws SecurityException {
-        List<Method> methods = searchType.isInterface() ? Arrays.asList(searchType.getMethods()) : getAllDeclaredMethods(searchType);
-        return methods;
+        return searchType.isInterface() 
+                ? Arrays.asList(searchType.getMethods()) 
+                : getAllDeclaredMethods(searchType);
     }
 
     public static List<Method> getAllDeclaredMethods(Class<?> clazz) {

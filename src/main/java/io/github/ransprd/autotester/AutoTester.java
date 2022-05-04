@@ -21,11 +21,13 @@ import io.github.ransprd.autotester.analyzer.MetaDataForField;
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
 import io.github.ransprd.autotester.tests.cases.CombinedGetterSetterTestCase;
 import io.github.ransprd.autotester.tests.FieldTestCaseContext;
+import io.github.ransprd.autotester.tests.TestCase;
 import io.github.ransprd.autotester.tests.TestCaseFailureResult;
+import io.github.ransprd.autotester.tests.cases.GetterTestCase;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  *
@@ -33,28 +35,27 @@ import java.util.stream.Stream;
  */
 public class AutoTester {
 
-    public static AutoTester forClass(Class classUnderTest) {
+    public static AutoTester forClass(Class<?> classUnderTest) {
         if (classUnderTest == null) {
             throw new NullPointerException("Given 'class under test' cannot be null.");
         }
         return new AutoTester(classUnderTest);
     }
     
-    private final Class targetTestClass;
+    private final Class<?> targetTestClass;
     
-    private final List<CombinedGetterSetterTestCase> testCases = 
-            Arrays.asList(new CombinedGetterSetterTestCase());
+    private final List<TestCase> testCases = 
+            Arrays.asList(new CombinedGetterSetterTestCase(), new GetterTestCase());
 
-    private AutoTester(Class targetTestClass) {
+    private AutoTester(Class<?> targetTestClass) {
         this.targetTestClass = targetTestClass;
     }
     
     public boolean test() {
-        StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
         MetaDataForClass classData = ClassAnalyzer.analyze(targetTestClass);
         List<TestCaseFailureResult> failures = classData.getAllFields().stream()
                         .map(field -> testField(classData, field))
-                        .flatMap(fails -> fails.stream())
+                        .flatMap(Collection::stream)
                         .toList();
         if (!failures.isEmpty()) {
             throw AutoTesterAssertionError.build(targetTestClass.getCanonicalName(), failures, getStackTrace("test"));
@@ -64,6 +65,8 @@ public class AutoTester {
     }
     
     private boolean testMethod(MetaDataForClass classData, MetaDataForMethod methodData) {
+        assert classData != null;
+        assert methodData != null;
         return true;
     }
     
@@ -72,15 +75,14 @@ public class AutoTester {
         return testCases.stream()
                     .filter(testCase -> testCase.isTestable(context))
                     .map( testCase -> testCase.executeTestCase(context))
-                    .flatMap(failures -> failures.stream())
-                    .toList()
-                    ;
+                    .flatMap(Collection::stream)
+                    .toList();
     }
     
     
     /**
-     * Create a stacktrace of the current call and remove some trace elements
-     * .
+     * Create a stacktrace of the current call and remove some trace elements.
+     * 
      * @param methodName everything before AutoTester.$methodName will be removed
      * @return 
      */

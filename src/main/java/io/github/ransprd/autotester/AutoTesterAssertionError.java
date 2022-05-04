@@ -26,7 +26,7 @@ public class AutoTesterAssertionError extends AssertionError {
     
     public static AutoTesterAssertionError build(String clazzName, List<TestCaseFailureResult> failures, StackTraceElement[] stacktrace) {
         if (failures == null || failures.isEmpty()) {
-            return new AutoTesterAssertionError("Some tests are broken for class <" +clazzName +">", stacktrace);
+            return new AutoTesterAssertionError("Some tests are broken for class <" +clazzName +">", List.of(), stacktrace);
         }
         
         StringBuilder str = new StringBuilder("There ");
@@ -41,13 +41,20 @@ public class AutoTesterAssertionError extends AssertionError {
             str.append("   -").append(failure.getMessage()).append("\n");
         }
         
-        return new AutoTesterAssertionError(str.toString(), stacktrace);
-        
+        return new AutoTesterAssertionError(str.toString(), failures, stacktrace);
     }
     
-    public AutoTesterAssertionError(String message, StackTraceElement[] stacktrace) {
+    private final List<TestCaseFailureResult> failures;
+    
+    public AutoTesterAssertionError(String message, List<TestCaseFailureResult> failures, StackTraceElement[] stacktrace) {
         super(message);
-        setStackTrace(stacktrace);
+        this.failures = (failures == null) ? List.of() : failures;
+        if (stacktrace != null) {
+            setStackTrace(stacktrace);
+        }
     }
-    
+
+    public List<TestCaseFailureResult> getFailures() {
+        return failures;
+    }
 }

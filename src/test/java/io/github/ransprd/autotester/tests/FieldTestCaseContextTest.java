@@ -17,7 +17,6 @@ package io.github.ransprd.autotester.tests;
 
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForField;
-import io.github.ransprd.autotester.analyzer.MetaDataForFieldTest;
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
 import io.github.ransprd.autotester.analyzer.detectors.MethodClassifications;
 import io.github.ransprd.autotester.analyzer.detectors.MethodType;
@@ -90,7 +89,7 @@ public class FieldTestCaseContextTest {
         assertEquals(1, getterList.size());
     }
     
-    
+    @Test
     public void testCreateTestableInstance() {
         FieldTestCaseContext testInstance = new FieldTestCaseContext(
                 new MetaDataForClass(ClassUnderTest.class), 

@@ -29,8 +29,7 @@ public class ClassAnalyzerTest {
     
     @Test
     public void testSeveralFieldsWithSameNameExist() {
-        ClassAnalyzer analyzer = new ClassAnalyzer();
-        MetaDataForClass metaData = analyzer.analyze(ClassUnderTest.class);
+        MetaDataForClass metaData = ClassAnalyzer.analyze(ClassUnderTest.class);
         
         Collection<MetaDataForField> fields = metaData.getAllFields();
         assertNotNull(fields);

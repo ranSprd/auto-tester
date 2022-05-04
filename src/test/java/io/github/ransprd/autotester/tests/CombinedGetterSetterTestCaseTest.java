@@ -20,7 +20,6 @@ import io.github.ransprd.autotester.analyzer.ClassAnalyzer;
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForField;
 import java.util.List;
-import java.util.Optional;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -30,7 +29,7 @@ import static org.junit.Assert.*;
  */
 public class CombinedGetterSetterTestCaseTest {
     
-//    @Test 
+    @Test 
     public void testIsTestable() {
         CombinedGetterSetterTestCase testCase = new CombinedGetterSetterTestCase();
         
@@ -42,8 +41,17 @@ public class CombinedGetterSetterTestCaseTest {
     }
     
     @Test
-    public void testWorkingExample() {
+    public void testNotExecutedInMethodContext() {
+        CombinedGetterSetterTestCase testCase = new CombinedGetterSetterTestCase();
+        MethodTestCaseContext testContext = null;
+        List<TestCaseFailureResult> fails = testCase.executeTestCase(testContext);
         
+        assertNotNull(fails);
+        assertTrue(fails.isEmpty());
+    }
+    
+    @Test
+    public void testWorkingExample() {
         MetaDataForClass clazzData = ClassAnalyzer.analyze(ClassUnderTest.class);
         MetaDataForField fieldData = clazzData.findField("field").get();
         

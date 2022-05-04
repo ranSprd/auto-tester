@@ -15,6 +15,8 @@
  */
 package io.github.ransprd.autotester;
 
+import io.github.ransprd.autotester.tests.TestCaseFailureResult;
+import java.util.Optional;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -34,6 +36,19 @@ public class AutoTesterTest {
         AutoTester.forClass( ClassUnderTest.class).test();
     }
     
+    @Test 
+    public void testFailureCase() {
+        AutoTesterAssertionError catchedAssert = assertThrows(AutoTesterAssertionError.class, () ->AutoTester.forClass( ClassUnderTestWithFailure.class).test());
+        assertNotNull(catchedAssert);
+        assertNotNull(catchedAssert.getFailures());
+        assertFalse(catchedAssert.getFailures().isEmpty());
+        
+        Optional<TestCaseFailureResult> fail = catchedAssert.getFailures().stream().findFirst();
+        assertTrue(fail.isPresent());
+        assertNotNull(fail.get().getMessage());
+        assertNull(fail.get().getThrowable()); // internaly no expection should be thrown in that case
+    }
+    
     
     public class ClassUnderTest {
         private String field;
@@ -44,6 +59,18 @@ public class AutoTesterTest {
 
         public void setField(String field) {
             this.field = field;
+        }
+    }
+    
+    public class ClassUnderTestWithFailure {
+        private String field;
+
+        public String getField() {
+            return field;
+        }
+
+        public void setField(String field) {
+            this.field = field +"A";
         }
     }
     

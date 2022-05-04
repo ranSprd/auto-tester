@@ -53,8 +53,8 @@ public class FieldTestCaseContext {
         return fieldData;
     }
 
-    public Field getField() {
-        return fieldData.getField();
+    public String getFieldName() {
+        return fieldData.getName();
     }
     
     public boolean containsMethods(MethodType... methodTypes) {
