@@ -24,15 +24,19 @@ import io.github.ransprd.autotester.ObjectReflectionTools;
 public class ClassAnalyzer {
     
     
-    public static MetaDataForClass analyze(Class clazz) {
+    public static MetaDataForClass analyze(Class<?> clazz) {
         MetaDataForClass.InstanceBuilder builder = MetaDataForClass.get(clazz);
         
         ObjectReflectionTools.getAllDeclaredFields(clazz, true)
-                .forEach(field -> builder.registerField(field));
+                .forEach(builder::registerField);
         
         ObjectReflectionTools.getAllMethods(clazz)
-                .forEach(method -> builder.registerMethod(method));
+                .forEach(builder::registerMethod);
         
         return builder.getInstance();
     }
+
+    private ClassAnalyzer() {
+    }
+    
 }
