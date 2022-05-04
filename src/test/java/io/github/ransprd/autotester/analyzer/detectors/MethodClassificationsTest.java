@@ -64,9 +64,14 @@ public class MethodClassificationsTest {
         assertFalse(c1.contains(MethodType.Setter, MethodType.Getter));
         
         MethodClassifications c2 = new MethodClassifications( List.of(new MethodTypeData(MethodType.Getter, null), new MethodTypeData(MethodType.Setter, null) ));
-        
         assertTrue(c2.contains(MethodType.Getter, MethodType.Setter));
         assertTrue(c2.contains(MethodType.Setter));
+        
+        MethodClassifications c3 = new MethodClassifications();
+        assertFalse(c3.contains(methodTypeNull));
+        
+        MethodClassifications c4 = new MethodClassifications( MethodType.Getter, null);
+        assertFalse(c4.contains(MethodType.Getter, MethodType.Setter));
     }
     
     @Test

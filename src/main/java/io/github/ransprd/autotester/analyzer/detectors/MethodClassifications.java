@@ -43,7 +43,7 @@ public class MethodClassifications {
      * @param singleField 
      */
     public MethodClassifications(MethodType methodType, Field singleField) {
-        this( new ArrayList());
+        this( new ArrayList<>());
         if (singleField == null) {
             classifications.add( new MethodTypeData(methodType, List.of()));
         } else {
@@ -56,7 +56,7 @@ public class MethodClassifications {
      * @param types 
      */
     public MethodClassifications(List<MethodTypeData> types) {
-        this.classifications = (types == null) ? new ArrayList() : types;
+        this.classifications = (types == null) ? new ArrayList<>() : types;
     }
 
     public MethodClassifications() {
