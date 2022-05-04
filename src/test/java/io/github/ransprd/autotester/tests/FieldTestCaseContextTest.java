@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain fieldA copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,6 +17,12 @@ package io.github.ransprd.autotester.tests;
 
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForField;
+import io.github.ransprd.autotester.analyzer.MetaDataForFieldTest;
+import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
+import io.github.ransprd.autotester.analyzer.detectors.MethodClassifications;
+import io.github.ransprd.autotester.analyzer.detectors.MethodType;
+import java.lang.reflect.Field;
+import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -33,13 +39,79 @@ public class FieldTestCaseContextTest {
     }
     
     @Test 
-    public void testContainsMethods() {
+    public void testContainsMethods() throws NoSuchFieldException, NoSuchMethodException {
+        
+        Field field = ClassUnderTest.class.getDeclaredField("fieldA");
+        
+        
         FieldTestCaseContext testInstance = new FieldTestCaseContext(
                 new MetaDataForClass(String.class), 
-                new MetaDataForField());
+                new MetaDataForField(field));
         assertFalse(testInstance.containsMethods());
-        assertFalse(testInstance.containsMethods(null));
+        MethodType methodType = null;
+        assertFalse(testInstance.containsMethods(methodType));
+        assertFalse(testInstance.containsMethods(MethodType.Getter));
+        
+        MetaDataForMethod methodMetaData = new MetaDataForMethod(
+                ClassUnderTest.class.getDeclaredMethod("getFieldA"), 
+                new MethodClassifications(MethodType.Getter, field));
+        testInstance.getFieldData().addMethod(methodMetaData);
         
     }
+    
+    @Test 
+    public void testGetMethodsClassifiedAs() throws NoSuchFieldException, NoSuchMethodException {
+        
+        Field field = ClassUnderTest.class.getDeclaredField("fieldA");
+        
+        
+        FieldTestCaseContext testInstance = new FieldTestCaseContext(
+                new MetaDataForClass(ClassUnderTest.class), 
+                new MetaDataForField(field));
+
+        MetaDataForMethod methodMetaData = new MetaDataForMethod(
+                ClassUnderTest.class.getDeclaredMethod("getFieldA"), 
+                new MethodClassifications(MethodType.Getter, field));
+        testInstance.getFieldData().addMethod(methodMetaData);
+
+        
+        List<MetaDataForMethod> emptyList = testInstance.getMethodsClassifiedAs(null);
+        assertNotNull(emptyList);
+        assertTrue(emptyList.isEmpty());
+        
+        assertFalse(testInstance.containsMethods(MethodType.Setter));
+        List<MetaDataForMethod> setterList = testInstance.getMethodsClassifiedAs(MethodType.Setter);
+        assertNotNull(setterList);
+        assertTrue(setterList.isEmpty());
+        
+        assertTrue(testInstance.containsMethods(MethodType.Getter));
+        List<MetaDataForMethod> getterList = testInstance.getMethodsClassifiedAs(MethodType.Getter);
+        assertNotNull(getterList);
+        assertEquals(1, getterList.size());
+    }
+    
+    
+    public void testCreateTestableInstance() {
+        FieldTestCaseContext testInstance = new FieldTestCaseContext(
+                new MetaDataForClass(ClassUnderTest.class), 
+                new MetaDataForField());
+        
+        assertNull( testInstance.createTestableClassInstance());
+    }
+    
+    
+    private class ClassUnderTest {
+        private String fieldA;
+
+        public ClassUnderTest(String fieldA) {
+            this.fieldA = fieldA;
+        }
+        
+        public String getFieldA() {
+            return fieldA;
+        }
+        
+    }
+    
     
 }

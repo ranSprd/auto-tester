@@ -35,6 +35,10 @@ public class MetaDataForField {
     public MetaDataForField() {
     }
 
+    public MetaDataForField(Field field) {
+        this.field = field;
+    }
+
     public Field getField() {
         return field;
     }
