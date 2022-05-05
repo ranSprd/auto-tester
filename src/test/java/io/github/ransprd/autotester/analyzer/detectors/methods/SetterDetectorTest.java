@@ -73,7 +73,7 @@ public class SetterDetectorTest {
         Optional<MethodClassifications> types = detect(methodName);
         assertTrue("There should be a classification", types.isPresent());
         assertEquals("Method '" +methodName +"' is not detected as SETTER", 1, types.get().size());
-        assertTrue("Method '" +methodName +"' is not detected as SETTER", types.get().contains(MethodType.Setter));
+        assertTrue("Method '" +methodName +"' is not detected as SETTER", types.get().contains(MethodType.SETTER));
     }
     
     public void shouldNotDetectAsSetter(String methodName) {

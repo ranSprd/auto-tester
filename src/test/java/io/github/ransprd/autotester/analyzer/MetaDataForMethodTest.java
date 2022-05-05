@@ -38,17 +38,17 @@ public class MetaDataForMethodTest {
     @Test
     public void testContainsAll() throws NoSuchMethodException {
         MetaDataForMethod testInstance = new MetaDataForMethod( Object.class.getMethod("toString"), 
-                                         new MethodClassifications( MethodType.Getter, null));
+                                         new MethodClassifications( MethodType.GETTER, null));
         
-        assertFalse( testInstance.contains(MethodType.Setter));
-        assertFalse( testInstance.contains(MethodType.Setter, MethodType.Getter));
-        assertTrue( testInstance.contains(MethodType.Getter));
+        assertFalse( testInstance.contains(MethodType.SETTER));
+        assertFalse( testInstance.contains(MethodType.SETTER, MethodType.GETTER));
+        assertTrue( testInstance.contains(MethodType.GETTER));
     }
     
     @Test
     public void testGetMethodClassifications() throws NoSuchMethodException {
         MetaDataForMethod testInstance1 = new MetaDataForMethod( Object.class.getMethod("toString"), 
-                                         new MethodClassifications( MethodType.Getter, null));
+                                         new MethodClassifications( MethodType.GETTER, null));
         assertNotNull(testInstance1.getMethodClassifications());
         
         MetaDataForMethod testInstance2 = new MetaDataForMethod( Object.class.getMethod("toString"), null);

@@ -27,10 +27,10 @@ import java.util.Optional;
  */
 public class MethodDetectorScope {
 
-    private final Class clazz;
+    private final Class<?> clazz;
     private final Method method;
 
-    public MethodDetectorScope(Class clazz, Method method) {
+    public MethodDetectorScope(Class<?> clazz, Method method) {
         Objects.requireNonNull(clazz, "Class cannot be null");
         Objects.requireNonNull(method, "Method cannot be null");
         
@@ -38,6 +38,10 @@ public class MethodDetectorScope {
         this.method = method;
     }
 
+    public Class<?> getClazz() {
+        return clazz;
+    }
+    
     public Method getMethod() {
         return method;
     }

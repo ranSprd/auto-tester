@@ -20,6 +20,7 @@ import io.github.ransprd.autotester.analyzer.detectors.methods.SetterDetector;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -45,7 +46,7 @@ public enum MethodTypeClassificator {
         MethodDetectorScope scope = new MethodDetectorScope(clazz, method);
         return new MethodClassifications(detectors.stream()
                         .map(detector -> detector.check(scope))
-                        .filter(classification -> classification.isPresent())
+                        .filter(Optional::isPresent)
                         .flatMap(classification -> classification.get().getClassifications().stream())
                         .distinct()
                         .toList() );

@@ -37,7 +37,7 @@ public class GetterTestCase extends TestCase {
 
     @Override
     public boolean isTestable(MethodTestCaseContext testContext) {
-        return testContext.contains(MethodType.Getter);
+        return testContext.contains(MethodType.GETTER);
     }
 
     @Override

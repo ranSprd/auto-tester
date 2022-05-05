@@ -21,8 +21,8 @@ package io.github.ransprd.autotester.analyzer.detectors;
  */
 public enum MethodType {
     
-    Setter,
-    Getter,
-    Builder
+    SETTER,
+    GETTER,
+    BUILDER
     
 }

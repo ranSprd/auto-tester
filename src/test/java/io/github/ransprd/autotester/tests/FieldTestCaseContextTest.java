@@ -49,11 +49,11 @@ public class FieldTestCaseContextTest {
         assertFalse(testInstance.containsMethods());
         MethodType methodType = null;
         assertFalse(testInstance.containsMethods(methodType));
-        assertFalse(testInstance.containsMethods(MethodType.Getter));
+        assertFalse(testInstance.containsMethods(MethodType.GETTER));
         
         MetaDataForMethod methodMetaData = new MetaDataForMethod(
                 ClassUnderTest.class.getDeclaredMethod("getFieldA"), 
-                new MethodClassifications(MethodType.Getter, field));
+                new MethodClassifications(MethodType.GETTER, field));
         testInstance.getFieldData().addMethod(methodMetaData);
         
     }
@@ -70,7 +70,7 @@ public class FieldTestCaseContextTest {
 
         MetaDataForMethod methodMetaData = new MetaDataForMethod(
                 ClassUnderTest.class.getDeclaredMethod("getFieldA"), 
-                new MethodClassifications(MethodType.Getter, field));
+                new MethodClassifications(MethodType.GETTER, field));
         testInstance.getFieldData().addMethod(methodMetaData);
 
         
@@ -78,13 +78,13 @@ public class FieldTestCaseContextTest {
         assertNotNull(emptyList);
         assertTrue(emptyList.isEmpty());
         
-        assertFalse(testInstance.containsMethods(MethodType.Setter));
-        List<MetaDataForMethod> setterList = testInstance.getMethodsClassifiedAs(MethodType.Setter);
+        assertFalse(testInstance.containsMethods(MethodType.SETTER));
+        List<MetaDataForMethod> setterList = testInstance.getMethodsClassifiedAs(MethodType.SETTER);
         assertNotNull(setterList);
         assertTrue(setterList.isEmpty());
         
-        assertTrue(testInstance.containsMethods(MethodType.Getter));
-        List<MetaDataForMethod> getterList = testInstance.getMethodsClassifiedAs(MethodType.Getter);
+        assertTrue(testInstance.containsMethods(MethodType.GETTER));
+        List<MetaDataForMethod> getterList = testInstance.getMethodsClassifiedAs(MethodType.GETTER);
         assertNotNull(getterList);
         assertEquals(1, getterList.size());
     }

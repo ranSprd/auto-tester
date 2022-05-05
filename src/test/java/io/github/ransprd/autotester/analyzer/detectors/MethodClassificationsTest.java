@@ -40,7 +40,7 @@ public class MethodClassificationsTest {
         assertNotNull(c2.getClassifications());
         assertTrue(c2.getClassifications().isEmpty());
         
-        MethodClassifications c3 = new MethodClassifications( MethodType.Getter, null);
+        MethodClassifications c3 = new MethodClassifications( MethodType.GETTER, null);
         assertNotNull(c3);
         assertNotNull(c3.getClassifications());
         assertFalse(c3.getClassifications().isEmpty());
@@ -48,35 +48,35 @@ public class MethodClassificationsTest {
     
     @Test
     public void testContainsSingle() {
-        MethodClassifications c1 = new MethodClassifications( MethodType.Getter, null);
+        MethodClassifications c1 = new MethodClassifications( MethodType.GETTER, null);
         
         MethodType methodTypeNull = null;
         assertFalse(c1.contains(methodTypeNull));
-        assertFalse(c1.contains(MethodType.Setter));
-        assertTrue(c1.contains(MethodType.Getter));
+        assertFalse(c1.contains(MethodType.SETTER));
+        assertTrue(c1.contains(MethodType.GETTER));
     }
     
     @Test
     public void testContainsMultiple() {
-        MethodClassifications c1 = new MethodClassifications( MethodType.Getter, null);
+        MethodClassifications c1 = new MethodClassifications( MethodType.GETTER, null);
         MethodType methodTypeNull = null;
         assertFalse(c1.contains(methodTypeNull, methodTypeNull));
-        assertFalse(c1.contains(MethodType.Setter, MethodType.Getter));
+        assertFalse(c1.contains(MethodType.SETTER, MethodType.GETTER));
         
-        MethodClassifications c2 = new MethodClassifications( List.of(new MethodTypeData(MethodType.Getter, null), new MethodTypeData(MethodType.Setter, null) ));
-        assertTrue(c2.contains(MethodType.Getter, MethodType.Setter));
-        assertTrue(c2.contains(MethodType.Setter));
+        MethodClassifications c2 = new MethodClassifications( List.of(new MethodTypeData(MethodType.GETTER, null), new MethodTypeData(MethodType.SETTER, null) ));
+        assertTrue(c2.contains(MethodType.GETTER, MethodType.SETTER));
+        assertTrue(c2.contains(MethodType.SETTER));
         
         MethodClassifications c3 = new MethodClassifications();
         assertFalse(c3.contains(methodTypeNull));
         
-        MethodClassifications c4 = new MethodClassifications( MethodType.Getter, null);
-        assertFalse(c4.contains(MethodType.Getter, MethodType.Setter));
+        MethodClassifications c4 = new MethodClassifications( MethodType.GETTER, null);
+        assertFalse(c4.contains(MethodType.GETTER, MethodType.SETTER));
     }
     
     @Test
     public void testUsedFields() {
-        MethodClassifications c1 = new MethodClassifications( MethodType.Getter, null);
+        MethodClassifications c1 = new MethodClassifications( MethodType.GETTER, null);
         Collection<Field> fields = c1.getUsedFields();
         assertNotNull(fields);
         assertTrue(fields.isEmpty());

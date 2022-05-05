@@ -40,7 +40,7 @@ public class CombinedGetterSetterTestCase extends TestCase {
     
     @Override
     public boolean isTestable(FieldTestCaseContext testContext) {
-        return testContext.containsMethods(MethodType.Getter, MethodType.Setter);
+        return testContext.containsMethods(MethodType.GETTER, MethodType.SETTER);
     }
     
     @Override
@@ -50,8 +50,8 @@ public class CombinedGetterSetterTestCase extends TestCase {
     
     @Override
     public List<TestCaseFailureResult> executeTestCase(FieldTestCaseContext testContext) {
-        List<MetaDataForMethod> getters = testContext.getMethodsClassifiedAs(MethodType.Getter);
-        List<MetaDataForMethod> setters = testContext.getMethodsClassifiedAs(MethodType.Setter);
+        List<MetaDataForMethod> getters = testContext.getMethodsClassifiedAs(MethodType.GETTER);
+        List<MetaDataForMethod> setters = testContext.getMethodsClassifiedAs(MethodType.SETTER);
         if (setters.isEmpty() || getters.isEmpty()) {
             return List.of();
         }

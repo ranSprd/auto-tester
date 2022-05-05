@@ -63,7 +63,7 @@ public class GetterDetectorTest {
         Optional<MethodClassifications> types = detect(methodName);
         assertTrue("There should be a classification", types.isPresent());
         assertEquals("Method '" +methodName +"' is not detected as GETTER", 1, types.get().size());
-        assertTrue("Method '" +methodName +"' is not detected as GETTER", types.get().contains(MethodType.Getter));
+        assertTrue("Method '" +methodName +"' is not detected as GETTER", types.get().contains(MethodType.GETTER));
     }
     
     public void shouldNotDetectAsSetter(String methodName) {

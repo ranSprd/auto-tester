@@ -15,6 +15,7 @@
  */
 package io.github.ransprd.autotester.analyzer;
 
+import io.github.ransprd.autotester.analyzer.detectors.MethodClassifications.MethodTypeData;
 import io.github.ransprd.autotester.analyzer.detectors.MethodType;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -99,9 +100,9 @@ public class MetaDataForField {
      */
     public Collection<MethodType> getAllMethodTypes() {
         return usedByMethods.stream()
-                .map( method -> method.getMethodClassifications())
+                .map( MetaDataForMethod::getMethodClassifications)
                 .flatMap(classifications -> classifications.getClassifications().stream())
-                .map(methodData -> methodData.methodType())
+                .map(MethodTypeData::methodType)
                 .distinct()
                 .toList();
     }

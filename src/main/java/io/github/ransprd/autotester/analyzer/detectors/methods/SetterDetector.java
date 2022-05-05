@@ -37,7 +37,7 @@ public class SetterDetector implements MethodDetector {
                 String setterFieldName = methodName.substring(3);
                 Optional<Field> field = scope.findField(setterFieldName);
                 if (field.isPresent()) {
-                    return Optional.of(new MethodClassifications(MethodType.Setter, field.get()));
+                    return Optional.of(new MethodClassifications(MethodType.SETTER, field.get()));
                 }
             }
         }

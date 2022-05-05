@@ -43,7 +43,7 @@ public class GetterDetector implements MethodDetector {
                         Class<?> methodResultType = scope.getMethod().getReturnType();
                         Class<?> fieldType = field.get().getType();
                         if (Objects.equals(methodResultType, fieldType)) {
-                            return Optional.of(new MethodClassifications(MethodType.Getter, field.get()));
+                            return Optional.of(new MethodClassifications(MethodType.GETTER, field.get()));
                         }
                     }
                 }
@@ -54,7 +54,7 @@ public class GetterDetector implements MethodDetector {
     
     private Optional<Field> findFieldForGetter(MethodDetectorScope scope, String lowerCaseMethodName, String getterPrefix) {
         final int methodNameSize = lowerCaseMethodName.length();
-        // prefix of Getter method found and name is longer as that prefix
+        // prefix of GETTER method found and name is longer as that prefix
         if (lowerCaseMethodName.startsWith(getterPrefix) && methodNameSize > getterPrefix.length()) {
             String lowerCaseFieldName = lowerCaseMethodName.substring(getterPrefix.length());
             return scope.findField(lowerCaseFieldName);

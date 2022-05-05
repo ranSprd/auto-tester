@@ -46,9 +46,9 @@ public class AutoTesterAssertionError extends AssertionError {
     
     private final List<TestCaseFailureResult> failures;
     
-    public AutoTesterAssertionError(String message, List<TestCaseFailureResult> failures, StackTraceElement[] stacktrace) {
+    private AutoTesterAssertionError(String message, List<TestCaseFailureResult> failures, StackTraceElement[] stacktrace) {
         super(message);
-        this.failures = (failures == null) ? List.of() : failures;
+        this.failures = failures;
         if (stacktrace != null) {
             setStackTrace(stacktrace);
         }

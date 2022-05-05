@@ -32,12 +32,12 @@ public class MethodTypeClassificatorTest {
         MethodClassifications getStrFieldTypes = MethodTypeClassificator.INSTANCE.classify(ClassUnderTest.class, ClassUnderTest.class.getMethod("getStrField"));
         assertFalse(getStrFieldTypes.isEmpty());
         assertEquals("only a single method type is expected but classification result contains more", 1, getStrFieldTypes.size());
-        assertTrue("expectation was a classification as Getter", getStrFieldTypes.contains( MethodType.Getter));
+        assertTrue("expectation was a classification as Getter", getStrFieldTypes.contains(MethodType.GETTER));
         
         MethodClassifications setStrFieldTypes = MethodTypeClassificator.INSTANCE.classify(ClassUnderTest.class, ClassUnderTest.class.getMethod("setStrField", String.class));
         assertFalse(setStrFieldTypes.isEmpty());
         assertEquals("only a single method type is expected but classification result contains more", 1, setStrFieldTypes.size());
-        assertTrue("expectation was a classification as Setter", setStrFieldTypes.contains( MethodType.Setter));
+        assertTrue("expectation was a classification as Setter", setStrFieldTypes.contains(MethodType.SETTER));
     }
     
     private class ClassUnderTest {
