@@ -50,7 +50,7 @@ public abstract class TestCase {
     public TestCaseFailureResult fail(String message) {
         return fail(message, null);
     }
-
+    
     public String getTestCaseID() {
         return testCaseID;
     }

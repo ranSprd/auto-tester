@@ -18,6 +18,8 @@ package io.github.ransprd.autotester.tests;
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
 import io.github.ransprd.autotester.analyzer.detectors.MethodType;
+import io.github.ransprd.autotester.legacy.ObjectUnderTestFactory;
+import java.lang.reflect.Field;
 
 /**
  *
@@ -39,6 +41,11 @@ public class MethodTestCaseContext extends TestCaseContext {
     public boolean contains(MethodType... types) {
         return methodData.contains(types);
     }
+    
+    public Object createValueForField(Field field) {
+        return new ObjectUnderTestFactory().createObject( field.getType());
+    }
+    
     
     
 }

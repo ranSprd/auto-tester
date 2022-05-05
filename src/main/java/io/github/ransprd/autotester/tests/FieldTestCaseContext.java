@@ -15,7 +15,6 @@
  */
 package io.github.ransprd.autotester.tests;
 
-import io.github.ransprd.autotester.ObjectReflectionTools;
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForField;
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;

@@ -51,14 +51,23 @@ public class AutoTesterTest {
     
     
     public class ClassUnderTest {
-        private String field;
+        private String strField;
+        private int intField;
 
-        public String getField() {
-            return field;
+        public String getStrField() {
+            return strField;
         }
 
-        public void setField(String field) {
-            this.field = field;
+        public void setStrField(String strField) {
+            this.strField = strField;
+        }
+
+        public int getIntField() {
+            return intField;
+        }
+
+        public void setIntField(int intField) {
+            this.intField = intField;
         }
     }
     
