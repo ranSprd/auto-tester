@@ -21,8 +21,6 @@ import io.github.ransprd.autotester.analyzer.MetaDataForField;
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
 import io.github.ransprd.autotester.analyzer.detectors.MethodType;
 import io.github.ransprd.autotester.legacy.ObjectUnderTestFactory;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 import org.slf4j.LoggerFactory;
@@ -31,23 +29,19 @@ import org.slf4j.LoggerFactory;
  *
  * @author ranSprd
  */
-public class FieldTestCaseContext {
+public class FieldTestCaseContext extends TestCaseContext {
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(FieldTestCaseContext.class);
     
-    private final MetaDataForClass classData;
     private final MetaDataForField fieldData;
 
     public FieldTestCaseContext(MetaDataForClass classData, MetaDataForField fieldData) {
-        this.classData = classData;
+        super(classData);
         if (fieldData == null) {
             throw new NullPointerException("can not test an empty field");
         }
         this.fieldData = fieldData;
     }
 
-    public MetaDataForClass getClassData() {
-        return classData;
-    }
 
     public MetaDataForField getFieldData() {
         return fieldData;
@@ -88,14 +82,6 @@ public class FieldTestCaseContext {
     }
     
     
-    public Object createTestableClassInstance() {
-        try {
-            return ObjectReflectionTools.newInstance( getClassData().getClazzUnderTest());
-        } catch (Exception e) {
-            log.error("Can not call the non-args constructor of class [{}]", getClassData().getClazzUnderTest().getName());
-        }
-        return null;
-    }
     
     public Object createFieldValue() {
         return new ObjectUnderTestFactory().createObject( fieldData.getType());

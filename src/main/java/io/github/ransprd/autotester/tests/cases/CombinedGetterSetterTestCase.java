@@ -24,15 +24,12 @@ import io.github.ransprd.autotester.tests.TestCaseFailureResult;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author ranSprd
  */
 public class CombinedGetterSetterTestCase extends TestCase {
-    private static final Logger log = LoggerFactory.getLogger(CombinedGetterSetterTestCase.class);
     
     private static final String NAME = "Getter/Setter cycle check";
     
@@ -73,8 +70,7 @@ public class CombinedGetterSetterTestCase extends TestCase {
     }
     
     private TestCaseFailureResult testGetterSetterCycle(FieldTestCaseContext testContext, Method getter, Method setter) {
-        log.debug("start checking " +NAME + " for field [{}]", testContext.getFieldData().getName());
-        
+        debugLog("start checking {} for field [{}]", NAME, testContext.getFieldName());
         
         Object value = null;
         Object received = null;
@@ -97,12 +93,12 @@ public class CombinedGetterSetterTestCase extends TestCase {
         }
 
         if (!value.equals(received)) {
-            log.debug("fields not equal");
+            warnLog("field [{}] values not equal", testContext.getFieldName());
             return fail("The getter of field [" 
                     +testContext.getFieldName()
                     + "] returns a different result than was set with the setter" );
         } else {
-            log.debug("fields are equal");
+            debugLog("field [{}] values are equal", testContext.getFieldName());
         }
 
         return null;

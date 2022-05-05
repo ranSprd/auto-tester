@@ -32,8 +32,8 @@ public class AutoTesterAssertionErrorTest {
         assertNotNull( AutoTesterAssertionError.build("clazz", null, new StackTraceElement[0]));
         assertNotNull( AutoTesterAssertionError.build("clazz", List.of(), new StackTraceElement[0]));
         
-        assertNotNull( AutoTesterAssertionError.build("clazz", List.of( new TestCaseFailureResult("error1")), new StackTraceElement[0]));
-        assertNotNull( AutoTesterAssertionError.build("clazz", List.of( new TestCaseFailureResult("error1"), new TestCaseFailureResult("error2")), new StackTraceElement[0]));
+        assertNotNull( AutoTesterAssertionError.build("clazz", List.of( new TestCaseFailureResult("1", "error1")), new StackTraceElement[0]));
+        assertNotNull( AutoTesterAssertionError.build("clazz", List.of( new TestCaseFailureResult("1", "error1"), new TestCaseFailureResult("2", "error2")), new StackTraceElement[0]));
     }
     
 }

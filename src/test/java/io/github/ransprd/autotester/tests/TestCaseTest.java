@@ -28,7 +28,7 @@ public class TestCaseTest {
     @Test
     public void testGenerateTestCaseId() {
         TestCase testCase = new TestCaseImpl();
-        String id = testCase.generateTestCaseId();
+        String id = testCase.getTestCaseID();
         assertNotNull(id);
         assertFalse(id.isBlank());
     }

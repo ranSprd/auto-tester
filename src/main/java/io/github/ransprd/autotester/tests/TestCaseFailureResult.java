@@ -21,22 +21,28 @@ package io.github.ransprd.autotester.tests;
  */
 public class TestCaseFailureResult {
     
+    private final String testCaseId;
     private final String message;
     private Throwable throwable;
 
-    public TestCaseFailureResult(String message) {
+    public TestCaseFailureResult(String testCaseId, String message) {
+        this.testCaseId = testCaseId;
         this.message = message;
     }
 
-    public TestCaseFailureResult(String message, Throwable throwable) {
-        this.message = message;
+    
+    public TestCaseFailureResult(String testCaseId, String message, Throwable throwable) {
+        this(testCaseId, message);
         this.throwable = throwable;
     }
 
+    public String getTestCaseId() {
+        return testCaseId;
+    }
+    
     public String getMessage() {
         return message;
     }
-
     
     public Throwable getThrowable() {
         return throwable;

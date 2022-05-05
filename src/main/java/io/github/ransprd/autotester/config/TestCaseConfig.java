@@ -15,6 +15,12 @@
  */
 package io.github.ransprd.autotester.config;
 
+import io.github.ransprd.autotester.tests.TestCase;
+import io.github.ransprd.autotester.tests.cases.CombinedGetterSetterTestCase;
+import io.github.ransprd.autotester.tests.cases.GetterTestCase;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  * @author ranSprd
@@ -31,7 +37,8 @@ public class TestCaseConfig {
         this.testSuperclassFields = testSuperclassFields;
     }
     
-    
-    
+    public List<TestCase> getTestCases() {
+        return Arrays.asList(new CombinedGetterSetterTestCase(), new GetterTestCase());
+    }
     
 }

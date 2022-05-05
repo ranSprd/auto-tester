@@ -17,6 +17,8 @@ package io.github.ransprd.autotester.tests;
 
 import java.util.List;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -24,23 +26,53 @@ import java.util.UUID;
  */
 public abstract class TestCase {
     
+    private final String testCaseID = UUID.randomUUID().toString();
+    private final String logPrefix;
+    private final Logger logger;
     
     public abstract boolean isTestable(MethodTestCaseContext testContext);
     public abstract boolean isTestable(FieldTestCaseContext testContext);
     
     public abstract List<TestCaseFailureResult> executeTestCase(MethodTestCaseContext testContext);
     public abstract List<TestCaseFailureResult> executeTestCase(FieldTestCaseContext testContext);
+
+    public TestCase() {
+        logger = LoggerFactory.getLogger( getClass());
+        logPrefix = "[" + testCaseID +"] - ";
+    }
+    
+    
     
     public TestCaseFailureResult fail(String message, Throwable throwable) {
-        return new TestCaseFailureResult(message, throwable);
+        return new TestCaseFailureResult(testCaseID, message, throwable);
     }
 
     public TestCaseFailureResult fail(String message) {
         return fail(message, null);
     }
-    
-    public String generateTestCaseId() {
-        return UUID.randomUUID().toString();
+
+    public String getTestCaseID() {
+        return testCaseID;
     }
+    
+    
+    
+    public void debugLog(String string, Object... os) {
+        logger.debug(logPrefix +string, os);
+    }
+
+    public void infoLog(String string, Object... os) {
+        logger.info(logPrefix +string, os);
+    }
+
+    public void warnLog(String string, Object... os) {
+        logger.warn(logPrefix +string, os);
+    }
+
+    public void errorLog(String string, Object... os) {
+        logger.error(logPrefix +string, os);
+    }
+    
+    
     
 }

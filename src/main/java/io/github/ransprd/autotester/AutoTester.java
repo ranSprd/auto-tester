@@ -19,13 +19,11 @@ import io.github.ransprd.autotester.analyzer.ClassAnalyzer;
 import io.github.ransprd.autotester.analyzer.MetaDataForClass;
 import io.github.ransprd.autotester.analyzer.MetaDataForField;
 import io.github.ransprd.autotester.analyzer.MetaDataForMethod;
-import io.github.ransprd.autotester.tests.cases.CombinedGetterSetterTestCase;
+import io.github.ransprd.autotester.config.TestCaseConfigBuilder;
 import io.github.ransprd.autotester.tests.FieldTestCaseContext;
-import io.github.ransprd.autotester.tests.TestCase;
+import io.github.ransprd.autotester.tests.MethodTestCaseContext;
 import io.github.ransprd.autotester.tests.TestCaseFailureResult;
-import io.github.ransprd.autotester.tests.cases.GetterTestCase;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,42 +41,52 @@ public class AutoTester {
     }
     
     private final Class<?> targetTestClass;
+    private final TestCaseConfigBuilder configBuilder;
     
-    private final List<TestCase> testCases = 
-            Arrays.asList(new CombinedGetterSetterTestCase(), new GetterTestCase());
-
     private AutoTester(Class<?> targetTestClass) {
         this.targetTestClass = targetTestClass;
+        this.configBuilder = new TestCaseConfigBuilder();
     }
     
     public boolean test() {
         MetaDataForClass classData = ClassAnalyzer.analyze(targetTestClass);
-        List<TestCaseFailureResult> failures = classData.getAllFields().stream()
+        List<TestCaseFailureResult> fieldFailures = classData.getAllFields().stream()
                         .map(field -> testField(classData, field))
                         .flatMap(Collection::stream)
                         .toList();
-        if (!failures.isEmpty()) {
-            throw AutoTesterAssertionError.build(targetTestClass.getCanonicalName(), failures, getStackTrace("test"));
+        if (!fieldFailures.isEmpty()) {
+            throw AutoTesterAssertionError.build(targetTestClass.getCanonicalName(), fieldFailures, getStackTrace("test"));
         }
-        classData.getAllMethods().stream().forEach(method -> testMethod(classData, method));
+        List<TestCaseFailureResult> methodFailures = classData.getAllMethods().stream()
+                        .map(method -> testMethod(classData, method))
+                        .flatMap(Collection::stream)
+                        .toList();
+        if (!methodFailures.isEmpty()) {
+            throw AutoTesterAssertionError.build(targetTestClass.getCanonicalName(), methodFailures, getStackTrace("test"));
+        }
         return true;
     }
     
-    private boolean testMethod(MetaDataForClass classData, MetaDataForMethod methodData) {
+    private List<TestCaseFailureResult> testMethod(MetaDataForClass classData, MetaDataForMethod methodData) {
         assert classData != null;
         assert methodData != null;
-        return true;
-    }
-    
-    private List<TestCaseFailureResult> testField(MetaDataForClass classData, MetaDataForField fieldData) {
-        FieldTestCaseContext context = new FieldTestCaseContext(classData, fieldData);
-        return testCases.stream()
+        
+        MethodTestCaseContext context = new MethodTestCaseContext(classData, methodData);
+        return configBuilder.getConfig().getTestCases().stream()
                     .filter(testCase -> testCase.isTestable(context))
                     .map( testCase -> testCase.executeTestCase(context))
                     .flatMap(Collection::stream)
                     .toList();
     }
     
+    private List<TestCaseFailureResult> testField(MetaDataForClass classData, MetaDataForField fieldData) {
+        FieldTestCaseContext context = new FieldTestCaseContext(classData, fieldData);
+        return configBuilder.getConfig().getTestCases().stream()
+                    .filter(testCase -> testCase.isTestable(context))
+                    .map( testCase -> testCase.executeTestCase(context))
+                    .flatMap(Collection::stream)
+                    .toList();
+    }
     
     /**
      * Create a stacktrace of the current call and remove some trace elements.

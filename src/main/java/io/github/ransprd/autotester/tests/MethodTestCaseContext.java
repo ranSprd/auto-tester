@@ -23,18 +23,13 @@ import io.github.ransprd.autotester.analyzer.detectors.MethodType;
  *
  * @author ranSprd
  */
-public class MethodTestCaseContext {
+public class MethodTestCaseContext extends TestCaseContext {
 
-    private final MetaDataForClass classData;
     private final MetaDataForMethod methodData;
 
     public MethodTestCaseContext(MetaDataForClass classData, MetaDataForMethod methodData) {
-        this.classData = classData;
+        super(classData);
         this.methodData = methodData;
-    }
-
-    public MetaDataForClass getClassData() {
-        return classData;
     }
 
     public MetaDataForMethod getMethodData() {

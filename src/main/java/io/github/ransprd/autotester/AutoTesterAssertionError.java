@@ -38,7 +38,7 @@ public class AutoTesterAssertionError extends AssertionError {
         str.append(" for class <").append(clazzName).append(">\n");
         
         for(TestCaseFailureResult failure : failures) {
-            str.append("   -").append(failure.getMessage()).append("\n");
+            str.append("   [").append(failure.getTestCaseId()).append("] ").append(failure.getMessage()).append("\n");
         }
         
         return new AutoTesterAssertionError(str.toString(), failures, stacktrace);
